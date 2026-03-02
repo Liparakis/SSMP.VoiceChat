@@ -9,6 +9,7 @@ public class VoiceChatClientAddon : ClientAddon {
     /// <inheritdoc />
     public override void Initialize(IClientApi clientApi) {
         new ClientVoiceChat(this, clientApi, Logger).Initialize();
+        VoiceChatMod.ChatBox = clientApi.UiManager.ChatBox;
     }
 
     /// <inheritdoc />

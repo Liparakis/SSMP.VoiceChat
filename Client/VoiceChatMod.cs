@@ -13,17 +13,13 @@ public partial class VoiceChatMod : BaseUnityPlugin {
     /// <summary>
     /// Statically accessible mod settings.
     /// </summary>
-    public static ModSettings ModSettings = new();
+    internal static ModSettings ModSettings;
+    internal static IChatBox ChatBox;
 
     /// <inheritdoc />
     public void Awake() {
         ClientAddon.RegisterAddon(new VoiceChatClientAddon());
         ServerAddon.RegisterAddon(new VoiceChatServerAddon());
-        ModSettings = ModSettings.LoadFromFile();
-    }
-
-    /// <inheritdoc />
-    public void OnLoadGlobal(ModSettings modSettings) {
-        ModSettings = modSettings ?? new ModSettings();
+        ModSettings = new ModSettings(Config);
     }
 }

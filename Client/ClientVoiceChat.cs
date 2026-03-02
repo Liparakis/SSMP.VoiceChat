@@ -59,12 +59,10 @@ public class ClientVoiceChat {
         var voiceChatCommand = new ClientVoiceChatCommand(_clientApi.UiManager.ChatBox);
         _clientApi.CommandManager.RegisterCommand(voiceChatCommand);
 
-        voiceChatCommand.SetMicrophoneEvent += micName => {
-            VoiceChatMod.ModSettings.MicrophoneDeviceName = micName;
+        VoiceChatMod.ModSettings.SetMicrophoneEvent += micName => {
             ReloadAudio();
         };
-        voiceChatCommand.SetSpeakerEvent += speakerName => {
-            VoiceChatMod.ModSettings.SpeakerDeviceName = speakerName;
+        VoiceChatMod.ModSettings.SetSpeakerEvent += speakerName => {
             ReloadAudio();
         };
         voiceChatCommand.ToggleMuteEvent += () => {
