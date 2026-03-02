@@ -289,7 +289,7 @@ public class ClientVoiceChatCommand : IClientCommand {
             args,
             VoiceChatMod.ModSettings,
             _chatBox.AddMessage,
-            null,
+            () => VoiceChatMod.ModSettings.SaveToFile(),
             true
         );
     }

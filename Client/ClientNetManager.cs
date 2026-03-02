@@ -3,7 +3,7 @@ using SSMP.Api.Client;
 using SSMP.Api.Client.Networking;
 using SSMP.Networking.Packet;
 using SSMP.Networking.Packet.Data;
-using SSMPVoiceChat.Common.Net;
+using SsmpVoiceChat.Common.Net;
 using ServerPacketId = SsmpVoiceChat.Common.Net.ServerPacketId;
 
 namespace SsmpVoiceChat.Client;

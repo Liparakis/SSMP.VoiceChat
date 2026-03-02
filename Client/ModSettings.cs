@@ -1,5 +1,9 @@
-using SSMP.Game.Settings;
 using Newtonsoft.Json;
+using SSMP.Game.Settings;
+using SsmpVoiceChat.Server;
+using System.IO;
+using System.Reflection;
+using System;
 
 namespace SsmpVoiceChat.Client; 
 
@@ -7,6 +11,10 @@ namespace SsmpVoiceChat.Client;
 /// Mod settings for the voice chat mod.
 /// </summary>
 public class ModSettings {
+    /// <summary>
+    /// The file name of the JSON settings file.
+    /// </summary>
+    private const string FileName = "voicechat_client_settings.json";
     /// <summary>
     /// The name of the microphone device currently used.
     /// </summary>
@@ -40,4 +48,61 @@ public class ModSettings {
     [JsonProperty("smooth_channel_transition")]
     [SettingAlias("smoothaudio")]
     public bool SmoothChannelTransition { get; set; } = true;
+
+    /// <summary>
+    /// Save the client settings to file.
+    /// </summary>
+    public void SaveToFile()
+    {
+        var dirName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        if (dirName == null)
+        {
+            return;
+        }
+
+        var filePath = Path.Combine(dirName, FileName);
+        var settingsJson = JsonConvert.SerializeObject(this, Formatting.Indented);
+
+        try
+        {
+            File.WriteAllText(filePath, settingsJson);
+        }
+        catch (Exception e)
+        {
+            ServerVoiceChat.Logger.Error($"Could not write server settings to file:\n{e}");
+        }
+    }
+
+    /// <summary>
+    /// Load the client settings from file.
+    /// </summary>
+    /// <returns>An instance with the loaded settings or a new instance if it could not be loaded.</returns>
+    public static ModSettings LoadFromFile()
+    {
+        var dirName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        if (dirName == null)
+        {
+            return new ModSettings();
+        }
+
+        var filePath = Path.Combine(dirName, FileName);
+        if (!File.Exists(filePath))
+        {
+            var settings = new ModSettings();
+            settings.SaveToFile();
+            return settings;
+        }
+
+        try
+        {
+            var fileContents = File.ReadAllText(filePath);
+            var settings = JsonConvert.DeserializeObject<ModSettings>(fileContents);
+            return settings ?? new ModSettings();
+        }
+        catch (Exception e)
+        {
+            ServerVoiceChat.Logger.Error($"Could not load server settings from file:\n{e}");
+            return new ModSettings();
+        }
+    }
 }

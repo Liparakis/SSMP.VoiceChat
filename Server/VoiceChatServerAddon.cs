@@ -16,5 +16,7 @@ public class VoiceChatServerAddon : ServerAddon {
     /// <inheritdoc />
     protected override string Version => Identifier.AddonVersion;
     /// <inheritdoc />
+    public override uint ApiVersion => Identifier.ApiVersion;
+    /// <inheritdoc />
     public override bool NeedsNetwork => true;
 }
