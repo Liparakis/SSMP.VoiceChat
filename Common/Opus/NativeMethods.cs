@@ -27,9 +27,9 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using HkmpVoiceChat.Client;
+using SsmpVoiceChat.Client;
 
-namespace HkmpVoiceChat.Common.Opus;
+namespace SsmpVoiceChat.Common.Opus;
 
 /// <summary>
 /// Wraps the Opus API.

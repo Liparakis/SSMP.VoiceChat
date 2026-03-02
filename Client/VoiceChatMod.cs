@@ -1,22 +1,20 @@
-using Hkmp.Api.Client;
-using Hkmp.Api.Server;
-using HkmpVoiceChat.Server;
+using BepInEx;
 using Modding;
+using SSMP.Api.Client;
+using SSMP.Api.Server;
+using SsmpVoiceChat.Server;
 
-namespace HkmpVoiceChat.Client; 
+namespace SsmpVoiceChat.Client; 
 
 /// <summary>
 /// The voice chat mod class.
 /// </summary>
-public class VoiceChatMod : Mod, IGlobalSettings<ModSettings> {
+[BepInAutoPlugin(id: "io.github.bobbythecatfish.SSMP.VoiceChat")]
+public partial class VoiceChatMod : BaseUnityPlugin {
     /// <summary>
     /// Statically accessible mod settings.
     /// </summary>
     public static ModSettings ModSettings = new();
-
-    /// <inheritdoc />
-    public VoiceChatMod() : base("HKMP.VoiceChat") {
-    }
 
     /// <inheritdoc />
     public override string GetVersion() {

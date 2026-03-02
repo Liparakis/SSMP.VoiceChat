@@ -1,7 +1,7 @@
-using Hkmp.Game.Settings;
+using SSMP.Game.Settings;
 using Newtonsoft.Json;
 
-namespace HkmpVoiceChat.Client; 
+namespace SsmpVoiceChat.Client; 
 
 /// <summary>
 /// Mod settings for the voice chat mod.

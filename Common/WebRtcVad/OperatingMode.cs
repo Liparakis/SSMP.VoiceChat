@@ -1,4 +1,4 @@
-namespace HkmpVoiceChat.Common.WebRtcVad; 
+namespace SsmpVoiceChat.Common.WebRtcVad; 
 
 /// <summary>
 /// Operating mode for Web RTC VAD.

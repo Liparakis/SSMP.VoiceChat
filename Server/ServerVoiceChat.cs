@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using Hkmp.Api.Server;
-using Hkmp.Game;
-using Hkmp.Logging;
+using SSMP.Api.Server;
+using SSMP.Game;
+using SSMP.Logging;
 
-namespace HkmpVoiceChat.Server; 
+namespace SsmpVoiceChat.Server; 
 
 /// <summary>
 /// The server-side voice chat.

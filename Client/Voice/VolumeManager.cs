@@ -1,6 +1,6 @@
 using System;
 
-namespace HkmpVoiceChat.Client.Voice; 
+namespace SsmpVoiceChat.Client.Voice; 
 
 /// <summary>
 /// Static class for managing volume levels of audio data.

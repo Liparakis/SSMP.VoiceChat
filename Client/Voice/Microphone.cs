@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using OpenTK.Audio.OpenAL;
 
-namespace HkmpVoiceChat.Client.Voice;
+namespace SsmpVoiceChat.Client.Voice;
 
 /// <summary>
 /// Microphone class that handles the microphone device through OpenAL.

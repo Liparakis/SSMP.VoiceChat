@@ -1,4 +1,4 @@
-﻿namespace HkmpVoiceChat.Common.Opus;
+﻿namespace SsmpVoiceChat.Common.Opus;
 
 /// <summary>
 /// Constants for the Opus encoding.

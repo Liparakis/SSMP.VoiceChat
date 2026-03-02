@@ -26,7 +26,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace HkmpVoiceChat.Common;
+namespace SsmpVoiceChat.Common;
 
 /// <summary>
 /// Library loader for loading libraries to access the native methods. 

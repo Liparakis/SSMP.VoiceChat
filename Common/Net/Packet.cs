@@ -1,7 +1,7 @@
 using System;
-using Hkmp.Networking.Packet;
+using SSMP.Networking.Packet;
 
-namespace HkmpVoiceChat.Common.Net;
+namespace SsmpVoiceChat.Common.Net;
 
 /// <summary>
 /// Packet for server-bound voice data.

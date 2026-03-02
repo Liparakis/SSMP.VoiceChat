@@ -1,10 +1,10 @@
 using System;
 using System.IO;
 using System.Reflection;
-using Hkmp.Game.Settings;
+using SSMP.Game.Settings;
 using Newtonsoft.Json;
 
-namespace HkmpVoiceChat.Server;
+namespace SsmpVoiceChat.Server;
 
 /// <summary>
 /// Class with server-related settings.

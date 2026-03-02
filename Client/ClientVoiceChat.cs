@@ -1,9 +1,9 @@
-using Hkmp.Api.Client;
-using Hkmp.Logging;
-using Hkmp.Math;
-using HkmpVoiceChat.Client.Voice;
+using SSMP.Api.Client;
+using SSMP.Logging;
+using SSMP.Math;
+using SsmpVoiceChat.Client.Voice;
 
-namespace HkmpVoiceChat.Client;
+namespace SsmpVoiceChat.Client;
 
 /// <summary>
 /// The client-side voice chat.

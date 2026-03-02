@@ -1,11 +1,11 @@
 using System;
 using System.Threading;
-using HkmpVoiceChat.Common;
-using HkmpVoiceChat.Common.Opus;
-using HkmpVoiceChat.Common.RNNoise;
-using HkmpVoiceChat.Common.WebRtcVad;
+using SsmpVoiceChat.Common;
+using SsmpVoiceChat.Common.Opus;
+using SsmpVoiceChat.Common.RNNoise;
+using SsmpVoiceChat.Common.WebRtcVad;
 
-namespace HkmpVoiceChat.Client.Voice;
+namespace SsmpVoiceChat.Client.Voice;
 
 /// <summary>
 /// Class that manages the microphone. Creates the microphone device, handles reading from it, handles denoising,

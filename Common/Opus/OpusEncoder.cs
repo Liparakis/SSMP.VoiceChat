@@ -26,7 +26,7 @@
 using System;
 using System.Linq;
 
-namespace HkmpVoiceChat.Common.Opus;
+namespace SsmpVoiceChat.Common.Opus;
 
 /// <summary>
 /// Opus encoder.

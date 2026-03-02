@@ -1,28 +1,27 @@
-# HKMP Voice Chat
-A mod and HKMP addon that implements voice chat between players.
+# SSMP Voice Chat
+A mod and SSMP addon that implements voice chat between players.
 
 ## How it works
-HKMP Voice Chat works using a few libraries to facilitate voice chat:
+SSMP Voice Chat works using a few libraries to facilitate voice chat:
 - [OpenAL](https://www.openal.org/): To record and play audio positionally
 - [Opus](https://opus-codec.org/): Audio codec to efficiently encode audio for networking
 - [RNNoise](https://jmvalin.ca/demo/rnnoise/): Lightweight neural network that filters out noise from audio
 
-HKMP Voice Chat uses the HKMP API to network audio data and the server addon takes care of delivering the audio to the
+SSMP Voice Chat uses the SSMP API to network audio data and the server addon takes care of delivering the audio to the
 correct clients based on the server configuration.
 
 ## Install
 ### Client
-HKMP.VoiceChat requires that it is installed on both the server and the client.
+SSMP.VoiceChat requires that it is installed on both the server and the client.
 If you host from in-game, simply install the mod and start hosting.
-To install it on your client, you should put the contents of the `HKMP.VoiceChat.zip` in your `Mods/` folder,
-such that you have the folder `Mods/HKMP.VoiceChat/` with the file `HKMPVoiceChat.dll` in it (and a bunch of others).
+To install it on your client, you should put the contents of the `SSMP.VoiceChat.zip` in your `Mods/` folder,
+such that you have the folder `Mods/SSMP.VoiceChat/` with the file `SSMPVoiceChat.dll` in it (and a bunch of others).
 
 The mods folder can be found in your steam installation (Beware that these are the default locations.
 Your install may be in a different location):
-- **Windows**: `C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\Mods\`
-- **Mac**: `~/Library/Application Support/Steam/steamapps/common/Hollow Knight/hollow_knight.app/`,
-then click "open package contents" and `content -> resources -> data -> managed -> mods`
-- **Linux**: `~/.local/share/Steam/steamapps/common/Hollow Knight/hollow_knight_Data/Managed/Mods/`
+- **Windows**: `C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight Silksong\BepInEx\plugins\`
+- **Mac**: `~/Library/Application Support/Steam/steamapps/common/Hollow Knight Silksong/BepInEx/plugins/`,
+- **Linux**: `~/.local/share/Steam/steamapps/common/Hollow Knight Silksong/BepInEx/plugins/`
 
 Make sure that you have OpenAL installed.
 It's a library program that facilitates recording and playing audio (positionally).
@@ -33,8 +32,8 @@ To install it:
 ### Server
 If you are hosting a standalone server, make sure to add the following files/directories to the server directory
 (these are included in the `.zip` file):
-- `HKMPVoiceChat.dll`
-- `HKMPVoiceChat.pdb`
+- `SSMPVoiceChat.dll`
+- `SSMPVoiceChat.pdb`
 - `Natives/`
 - `OpenTK.dll`
 - `OpenTK.dll.config`
@@ -65,7 +64,7 @@ For the server configuration you can use the commands below. Please note that th
 - `/vcs broadcast` : Toggle broadcasting your voice chat to the entire server.
 
 ## Copyright and license
-HKMP.VoiceChat is a game modification for Hollow Knight that adds voice chat to HKMP.  
+SSMP.VoiceChat is a game modification for Hollow Knight: Silksong that adds voice chat to SSMP.  
 Copyright (C) 2025  Extremelyd1
 
     This library is free software; you can redistribute it and/or

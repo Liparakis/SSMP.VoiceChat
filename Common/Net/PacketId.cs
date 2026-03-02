@@ -1,4 +1,4 @@
-namespace HkmpVoiceChat.Common.Net;
+namespace SsmpVoiceChat.Common.Net;
 
 /// <summary>
 /// Client to server packet IDs.

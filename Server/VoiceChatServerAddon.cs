@@ -1,6 +1,6 @@
-using Hkmp.Api.Server;
+using SSMP.Api.Server;
 
-namespace HkmpVoiceChat.Server;
+namespace SsmpVoiceChat.Server;
 
 /// <summary>
 /// The server-side voice chat addon class.

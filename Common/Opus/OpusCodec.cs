@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace HkmpVoiceChat.Common.Opus;
+namespace SsmpVoiceChat.Common.Opus;
 
 /// <summary>
 /// Class for the Opus codec for encoding and decoding voice data.

@@ -5,7 +5,7 @@ using System.Diagnostics;
 using OpenTK;
 using OpenTK.Audio.OpenAL;
 
-namespace HkmpVoiceChat.Client.Voice;
+namespace SsmpVoiceChat.Client.Voice;
 
 /// <summary>
 /// Class for managing sound. Getting and setting the device speaker and creating speakers (<see cref="Speaker"/>) for

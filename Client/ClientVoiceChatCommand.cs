@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Hkmp.Api.Client;
-using Hkmp.Api.Command.Client;
-using HkmpVoiceChat.Client.Voice;
-using HkmpVoiceChat.Common.Command;
+using SSMP.Api.Client;
+using SSMP.Api.Command.Client;
+using SsmpVoiceChat.Client.Voice;
+using SsmpVoiceChat.Common.Command;
 
-namespace HkmpVoiceChat.Client;
+namespace SsmpVoiceChat.Client;
 
 /// <summary>
 /// Command for the client-side voice chat.

@@ -1,6 +1,6 @@
 using System;
 
-namespace HkmpVoiceChat.Common.RNNoise; 
+namespace SsmpVoiceChat.Common.RNNoise; 
 
 /// <summary>
 /// The RNNoise class for processing voice data to reduce noise.

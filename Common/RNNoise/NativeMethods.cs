@@ -2,9 +2,9 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using HkmpVoiceChat.Client;
+using SsmpVoiceChat.Client;
 
-namespace HkmpVoiceChat.Common.RNNoise; 
+namespace SsmpVoiceChat.Common.RNNoise; 
 
 /// <summary>
 /// Wraps the RNNoise library.

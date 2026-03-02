@@ -1,10 +1,10 @@
 using System;
-using Hkmp.Math;
-using HkmpVoiceChat.Common;
-using HkmpVoiceChat.Common.Opus;
+using SSMP.Math;
+using SsmpVoiceChat.Common;
+using SsmpVoiceChat.Common.Opus;
 using OpenTK.Audio.OpenAL;
 
-namespace HkmpVoiceChat.Client.Voice;
+namespace SsmpVoiceChat.Client.Voice;
 
 /// <summary>
 /// Class that represents a single audio source. Used for outputting voice data from another player.

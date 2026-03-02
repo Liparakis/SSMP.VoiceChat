@@ -1,4 +1,4 @@
-namespace HkmpVoiceChat; 
+namespace SsmpVoiceChat; 
 
 /// <summary>
 /// Static class containing identifiers for the mod and addon.

@@ -25,7 +25,7 @@
 
 using System;
 
-namespace HkmpVoiceChat.Common.Opus;
+namespace SsmpVoiceChat.Common.Opus;
 
 /// <summary>
 /// Opus decoder.

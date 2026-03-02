@@ -1,12 +1,12 @@
 using System;
-using Hkmp.Api.Server;
-using Hkmp.Api.Server.Networking;
-using Hkmp.Networking.Packet;
-using Hkmp.Networking.Packet.Data;
-using HkmpVoiceChat.Common.Net;
-using ServerPacketId = HkmpVoiceChat.Common.Net.ServerPacketId;
+using SSMP.Api.Server;
+using SSMP.Api.Server.Networking;
+using SSMP.Networking.Packet;
+using SSMP.Networking.Packet.Data;
+using SsmpVoiceChat.Common.Net;
+using ServerPacketId = SsmpVoiceChat.Common.Net.ServerPacketId;
 
-namespace HkmpVoiceChat.Server;
+namespace SsmpVoiceChat.Server;
 
 /// <summary>
 /// Class that manages server-side networking for VoiceChat.

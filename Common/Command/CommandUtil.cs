@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
 using System.Reflection;
-using Hkmp.Game.Settings;
+using SSMP.Game.Settings;
 
-namespace HkmpVoiceChat.Common.Command;
+namespace SsmpVoiceChat.Common.Command;
 
 /// <summary>
 /// Static class for command utility methods.

@@ -1,6 +1,6 @@
 using System;
 
-namespace HkmpVoiceChat.Common;
+namespace SsmpVoiceChat.Common;
 
 /// <summary>
 /// Static class for utility methods for converting audio data to different formats.

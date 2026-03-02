@@ -1,6 +1,6 @@
 using System;
 
-namespace HkmpVoiceChat.Common.WebRtcVad; 
+namespace SsmpVoiceChat.Common.WebRtcVad; 
 
 /// <summary>
 /// Class for the Web RTC VAD library for detecting voice in microphone input.

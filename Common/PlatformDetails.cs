@@ -26,7 +26,7 @@
 using System;
 using System.IO;
 
-namespace HkmpVoiceChat.Common;
+namespace SsmpVoiceChat.Common;
 
 /// <summary>
 /// Provides access to platform details.
