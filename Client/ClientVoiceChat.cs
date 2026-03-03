@@ -10,10 +10,12 @@ namespace SsmpVoiceChat.Client;
 /// The client-side voice chat.
 /// </summary>
 public class ClientVoiceChat {
+
+    VoiceStatusIcon VoiceStatusIcon;
     /// <summary>
     /// The logger instance for logging information.
     /// </summary>
-    public static ILogger Logger { get; private set; }
+    public static SSMP.Logging.ILogger Logger { get; private set; }
 
     /// <summary>
     /// The client API instance.
@@ -46,7 +48,7 @@ public class ClientVoiceChat {
         {
             if (_muted) return true;
             var key = VoiceChatMod.ModSettings.PushToTalkKey;
-            if (key != KeyCode.None) return !Input.GetKeyDown(key);
+            if (key != KeyCode.None) return !Input.GetKey(key);
 
             return false;
         }
@@ -65,6 +67,7 @@ public class ClientVoiceChat {
         _netManager = new ClientNetManager(addon, clientApi.NetClient);
         _micManager = new MicrophoneManager();
 
+        VoiceStatusIcon = new VoiceStatusIcon();
         _soundManager = new SoundManager();
     }
 
@@ -86,6 +89,10 @@ public class ClientVoiceChat {
             _muted = !_muted;
 
             _clientApi.UiManager.ChatBox.AddMessage($"Microphone is now {(_muted ? "" : "un")}muted");
+            if (!_muted && Muted) _clientApi.UiManager.ChatBox.AddMessage($"Push To Talk is still enabled.");
+
+            if (!Muted) VoiceStatusIcon.SetTalking(VoiceStatusIcon.Status.NotTalking);
+            else VoiceStatusIcon.SetTalking(VoiceStatusIcon.Status.Muted);
         };
 
         ReloadAudio();
@@ -108,6 +115,7 @@ public class ClientVoiceChat {
 
         _micManager.Start();
         _micManager.VoiceDataEvent += OnVoiceGenerated;
+        _micManager.VoiceOffEvent += OnVoiceStopped;
     }
 
     /// <summary>
@@ -127,9 +135,17 @@ public class ClientVoiceChat {
     /// </summary>
     /// <param name="data">The voice data as a byte array.</param>
     private void OnVoiceGenerated(byte[] data) {
-        if (_clientApi.NetClient.IsConnected && !Muted) {
+        if (!_clientApi.NetClient.IsConnected) return;
+        if (!Muted) {
+            VoiceStatusIcon.SetTalking(VoiceStatusIcon.Status.Talking);
             _netManager.SendVoiceData(data);
+        } else {
+            VoiceStatusIcon.SetTalking(VoiceStatusIcon.Status.Muted);
         }
+    }
+    
+    private void OnVoiceStopped() { 
+        if (!Muted) VoiceStatusIcon.SetTalking(VoiceStatusIcon.Status.NotTalking);
     }
 
     /// <summary>
@@ -189,7 +205,7 @@ public class ClientVoiceChat {
 
         var pos = remotePos - localPos;
 
-        speaker.Play(data, volume, new Vector3(pos.x, pos.y, pos.z));
+        speaker.Play(data, volume, new SSMP.Math.Vector3(pos.x, pos.y, pos.z));
     }
 
     /// <summary>

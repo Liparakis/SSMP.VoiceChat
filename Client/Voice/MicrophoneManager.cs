@@ -16,6 +16,7 @@ public class MicrophoneManager {
     /// Event that is called whenever there is voice data available to be used.
     /// </summary>
     public event Action<byte[]> VoiceDataEvent;
+    public event Action VoiceOffEvent;
 
     /// <summary>
     /// The Opus encoding for encoding voice data.
@@ -105,6 +106,7 @@ public class MicrophoneManager {
                             _activating = false;
                             
                             ClientVoiceChat.Logger.Debug("Mic buffer does not have speech, de-activating");
+                            VoiceOffEvent?.Invoke();
                         } else {
                             VoiceDataEvent?.Invoke(_encoder.Encode(byteBuff));
                         }

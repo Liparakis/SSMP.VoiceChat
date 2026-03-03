@@ -87,7 +87,8 @@ internal class ModSettings {
         var mics = Voice.Microphone.GetAllMicrophones();
         if (id < 0 || id > mics.Count - 1)
         {
-            VoiceChatMod.ChatBox.AddMessage($"[VC]: Couldn't find a microphone with ID {_microphoneDeviceId}");
+            VoiceChatMod.ChatBox?.AddMessage($"[VC]: Couldn't find a microphone with ID {_microphoneDeviceId.Value - 1}");
+            Debug.LogError($"[VC]: Couldn't find a speaker with ID {_microphoneDeviceId.Value -1 }");
             return;
         }
 
@@ -102,7 +103,8 @@ internal class ModSettings {
         var speakers = SoundManager.GetAllDeviceSpeakers();
         if (id < 0 || id > speakers.Count - 1)
         {
-            VoiceChatMod.ChatBox.AddMessage($"[VC]: Couldn't find a speaker with ID {_speakerDeviceId}");
+            VoiceChatMod.ChatBox?.AddMessage($"[VC]: Couldn't find a speaker with ID {_speakerDeviceId.Value - 1}");
+            Debug.LogError($"[VC]: Couldn't find a speaker with ID {_speakerDeviceId.Value - 1}");
             return;
         }
 
