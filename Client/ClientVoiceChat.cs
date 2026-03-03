@@ -2,6 +2,7 @@ using SSMP.Api.Client;
 using SSMP.Logging;
 using SSMP.Math;
 using SsmpVoiceChat.Client.Voice;
+using UnityEngine;
 
 namespace SsmpVoiceChat.Client;
 
@@ -32,9 +33,24 @@ public class ClientVoiceChat {
     private readonly SoundManager _soundManager;
 
     /// <summary>
-    /// Whether the local player has their microphone muted and thus should not send any voice data.
+    /// Whether the local player has their microphone muted
     /// </summary>
     private bool _muted;
+
+    /// <summary>
+    /// Whether the local player has their microphone muted and Push To Talk engaged and thus should not send any voice data.
+    /// </summary>
+    private bool Muted
+    {
+        get
+        {
+            if (_muted) return true;
+            var key = VoiceChatMod.ModSettings.PushToTalkKey;
+            if (key != KeyCode.None) return !Input.GetKeyDown(key);
+
+            return false;
+        }
+    }
 
     /// <summary>
     /// Construct the client voice chat with the client addon and API.
@@ -42,7 +58,7 @@ public class ClientVoiceChat {
     /// <param name="addon">The client addon instance.</param>
     /// <param name="clientApi">The client API.</param>
     /// <param name="logger">The logger instance for logging information.</param>
-    public ClientVoiceChat(ClientAddon addon, IClientApi clientApi, ILogger logger) {
+    public ClientVoiceChat(ClientAddon addon, IClientApi clientApi, SSMP.Logging.ILogger logger) {
         Logger = logger;
 
         _clientApi = clientApi;
@@ -65,6 +81,7 @@ public class ClientVoiceChat {
         VoiceChatMod.ModSettings.SetSpeakerEvent += speakerName => {
             ReloadAudio();
         };
+
         voiceChatCommand.ToggleMuteEvent += () => {
             _muted = !_muted;
 
@@ -110,7 +127,7 @@ public class ClientVoiceChat {
     /// </summary>
     /// <param name="data">The voice data as a byte array.</param>
     private void OnVoiceGenerated(byte[] data) {
-        if (_clientApi.NetClient.IsConnected && !_muted) {
+        if (_clientApi.NetClient.IsConnected && !Muted) {
             _netManager.SendVoiceData(data);
         }
     }

@@ -52,6 +52,12 @@ internal class ModSettings {
     public bool SmoothChannelTransition => _smoothChannelTransition.Value;
 
 
+    ConfigEntry<KeyCode> _pushToTalkKey;
+    /// <summary>
+    /// The key to press to enable your microphone. Set to None to disable push to talk
+    /// </summary>
+    public KeyCode PushToTalkKey => _pushToTalkKey.Value;
+
     public ModSettings(ConfigFile config) {
         var defaultMicStr = Voice.Microphone.GetDefaultMicrophone();
         var defaultMicIndex = Voice.Microphone.GetAllMicrophones().IndexOf(defaultMicStr);
@@ -71,6 +77,8 @@ internal class ModSettings {
         
         _voiceChatVolume = config.Bind<float>("Volume", "Chat Volume", 1, "The volume of the voice chat of other players.");
         _smoothChannelTransition = config.Bind<bool>("Volume", "Smooth Channel Transition", true, "Whether the transition between audio from a player moving from the left to the right of the local player is smooth or not");
+
+        _pushToTalkKey = config.Bind<KeyCode>("Keybinds", "Push To Talk", KeyCode.None, "The key to press to enable your microphone. Set to None to disable push to talk");
     }
 
     private void OnMicrophoneIdChanged(object sender, EventArgs e)
