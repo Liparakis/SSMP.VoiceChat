@@ -20,14 +20,14 @@ public class ServerSettings {
     /// </summary>
     [JsonProperty("proximity_based_volume")]
     [SettingAlias("proximity", "prox")]
-    public bool ProximityBasedVolume { get; set; }
+    public bool ProximityBasedVolume { get; set; } = true;
 
     /// <summary>
     /// Whether to hear your team's voices globally independent of proximity or scenes.
     /// </summary>
     [JsonProperty("team_voices_globally")]
     [SettingAlias("teamglobal", "teamglobally")]
-    public bool TeamVoicesGlobally { get; set; }
+    public bool TeamVoicesGlobally { get; set; } = true;
 
     /// <summary>
     /// Whether to hear only your team's voices and not other teams, even if they are in the same scene or in close
@@ -35,7 +35,7 @@ public class ServerSettings {
     /// </summary>
     [JsonProperty("team_voices_only")]
     [SettingAlias("teamonly")]
-    public bool TeamVoicesOnly { get; set; }
+    public bool TeamVoicesOnly { get; set; } = false;
 
     /// <summary>
     /// Save the server settings to file.
