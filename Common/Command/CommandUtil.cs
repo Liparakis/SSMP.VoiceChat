@@ -29,14 +29,15 @@ public static class CommandUtil {
         Action successAction = null,
         bool requireSettingAliasAttribute = false
     ) {
+        var propertyInfos = typeof(TSettings).GetProperties();
+
         if (args.Length < 3) {
-            feedbackAction?.Invoke($"Invalid usage: {trigger} set <setting name> [value]");
+            feedbackAction?.Invoke($"Available settings: {string.Join(", ", propertyInfos.Select(p => p.Name))}");
             return;
         }
 
         var settingName = args[2];
 
-        var propertyInfos = typeof(TSettings).GetProperties();
 
         PropertyInfo settingProperty = null;
         foreach (var prop in propertyInfos) {
