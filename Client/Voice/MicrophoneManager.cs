@@ -99,13 +99,13 @@ public class MicrophoneManager {
                             VoiceDataEvent?.Invoke(_encoder.Encode(byteBuff));
                             
                             _activating = true;
-                            ClientVoiceChat.Logger.Debug("Mic buffer has speech, activating");
+                            //ClientVoiceChat.Logger.Debug("Mic buffer has speech, activating");
                         }
                     } else {
                         if (!hasSpeech) {
                             _activating = false;
                             
-                            ClientVoiceChat.Logger.Debug("Mic buffer does not have speech, de-activating");
+                            //ClientVoiceChat.Logger.Debug("Mic buffer does not have speech, de-activating");
                             VoiceOffEvent?.Invoke();
                         } else {
                             VoiceDataEvent?.Invoke(_encoder.Encode(byteBuff));

@@ -78,7 +78,9 @@ public class Speaker {
     /// positionally.</param>
     /// <param name="maxDistance">The maximum distance the audio should be heard from. If <paramref name="position"/>
     /// is supplied this max distance will determine the relative volume of the audio.</param>
-    public void Play(byte[] encodedData, float volume = 1f, Vector3 position = null, float maxDistance = DefaultMaxDistance) {
+    public void Play(byte[] encodedData, float volume = 1f, Vector3? position = null) {
+        var maxDistance = VoiceChatMod.ModSettings.MaxDistance;
+
         var byteData = _decoder.Decode(encodedData);
         var data = DataUtils.BytesToShorts(byteData);
         
@@ -104,10 +106,10 @@ public class Speaker {
     /// positionally.</param>
     /// <param name="maxDistance">The maximum distance the audio should be heard from. If <paramref name="position"/>
     /// is supplied this max distance will determine the relative volume of the audio.</param>
-    private void Write(short[] data, float volume, Vector3 position, float maxDistance) {
+    private void Write(short[] data, float volume, Vector3? position, float maxDistance) {
         SetPosition(position, maxDistance);
 
-        AL.Source(_source, ALSourcef.MaxGain, 6f);
+        AL.Source(_source, ALSourcef.MaxGain, 0.6f);
         SoundManager.CheckAlError(0);
         AL.Source(_source, ALSourcef.Gain, volume);
         SoundManager.CheckAlError(1);
@@ -142,6 +144,8 @@ public class Speaker {
         SoundManager.CheckAlError(0);
         AL.Source(_source, ALSourcef.MaxDistance, maxDistance);
         SoundManager.CheckAlError(1);
+        AL.Source(_source, ALSourcef.RolloffFactor, VoiceChatMod.ModSettings.RolloffFactor);
+        SoundManager.CheckAlError(2);
     }
 
     /// <summary>
@@ -149,7 +153,7 @@ public class Speaker {
     /// </summary>
     /// <param name="soundPos">The position as a float vector.</param>
     /// <param name="maxDistance">The maximum distance for positionally played audio.</param>
-    private void SetPosition(Vector3 soundPos, float maxDistance) {
+    private void SetPosition(Vector3? soundPos, float maxDistance) {
         AL.Listener(ALListener3f.Position, 0f, 0f, 0f);
         SoundManager.CheckAlError(0);
 
@@ -161,7 +165,7 @@ public class Speaker {
             var x = soundPos.X;
             var y = soundPos.Y;
             var z = soundPos.Z;
-            if (VoiceChatMod.ModSettings.SmoothChannelTransition && x is < 5f or > -5f) {
+            if (VoiceChatMod.ModSettings.SmoothChannelTransition && x is < 15f and > -15f) {
                 z = (float) -Math.Sqrt(25f - Math.Pow(x, 2));
             }
 
@@ -171,7 +175,7 @@ public class Speaker {
             AL.Source(_source, ALSource3f.Position, x, y, z);
             SoundManager.CheckAlError(3);
         } else {
-            LinearAttenuation(DefaultMaxDistance);
+            LinearAttenuation(VoiceChatMod.ModSettings.MaxDistance);
             AL.Source(_source, ALSourceb.SourceRelative, true);
             SoundManager.CheckAlError(4);
             AL.Source(_source, ALSource3f.Position, 0f, 0f, 0f);

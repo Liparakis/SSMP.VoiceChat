@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using OpenTK;
 using OpenTK.Audio.OpenAL;
 
@@ -94,7 +95,7 @@ public class SoundManager {
     /// <param name="id">The ID to associate with the speaker, most likely the player ID.</param>
     /// <param name="speaker">If this method returns true, the found or created speaker.</param>
     /// <returns>True if a speaker was found or a new speaker was created, otherwise false.</returns>
-    public bool TryGetOrCreateSpeaker(ushort id, out Speaker speaker) {
+    public bool TryGetOrCreateSpeaker(ushort id, [MaybeNullWhen(false)] out Speaker speaker) {
         if (IsClosed) {
             speaker = null;
             return false;

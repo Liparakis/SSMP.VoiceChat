@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using Silksong.ModMenu;
 
 namespace SsmpVoiceChat.Client;
 
@@ -58,6 +59,13 @@ internal class ModSettings {
     /// </summary>
     public KeyCode PushToTalkKey => _pushToTalkKey.Value;
 
+
+    ConfigEntry<float> _maxDistance;
+    public float MaxDistance => _maxDistance.Value;
+
+    ConfigEntry<float> _rolloffFactor;
+    public float RolloffFactor => _rolloffFactor.Value;
+
     public ModSettings(ConfigFile config) {
         var defaultMicStr = Voice.Microphone.GetDefaultMicrophone();
         var defaultMicIndex = Voice.Microphone.GetAllMicrophones().IndexOf(defaultMicStr);
@@ -79,6 +87,8 @@ internal class ModSettings {
         _smoothChannelTransition = config.Bind<bool>("Volume", "Smooth Channel Transition", true, "Whether the transition between audio from a player moving from the left to the right of the local player is smooth or not");
 
         _pushToTalkKey = config.Bind<KeyCode>("Keybinds", "Push To Talk", KeyCode.None, "The key to press to enable your microphone. Set to None to disable push to talk");
+        _maxDistance = config.Bind<float>("Testing", "Max Distance", 60);
+        _rolloffFactor = config.Bind<float>("Testing", "Rolloff Factor", 1.5f);
     }
 
     private void OnMicrophoneIdChanged(object sender, EventArgs e)

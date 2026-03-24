@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using OpenTK.Audio.OpenAL;
 
@@ -202,7 +203,9 @@ public class Microphone {
     /// </summary>
     /// <returns>A list of strings for all the names of the microphone devices.</returns>
     public static List<string> GetAllMicrophones() {
-        var devices = Alc.GetString(IntPtr.Zero, AlcGetStringList.CaptureDeviceSpecifier);
+        var devices = Alc.GetString(IntPtr.Zero, AlcGetStringList.CaptureDeviceSpecifier).ToList();
+        devices.Sort();
+
         SoundManager.CheckAlcError(IntPtr.Zero, 0);
 
         return devices == null ? [] : [..devices];
