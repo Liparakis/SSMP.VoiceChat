@@ -172,7 +172,7 @@ public class SoundManager {
     /// </summary>
     /// <returns>A string representing the default speaker device.</returns>
     public static string GetDefaultDeviceSpeaker() {
-        var defaultSpeaker = Alc.GetString(IntPtr.Zero, AlcGetString.DefaultDeviceSpecifier);
+        var defaultSpeaker = Alc.GetString(IntPtr.Zero, AlcGetString.DefaultAllDevicesSpecifier);
         CheckAlcError(IntPtr.Zero, 0);
 
         return defaultSpeaker;
