@@ -100,6 +100,11 @@ namespace SsmpVoiceChat.Client
             SetTalking(Status.NotTalking);
         }
 
+        public void DestroyIcon()
+        {
+            if (MicrophoneIcons != null) GameObject.Destroy(MicrophoneIcons);
+        }
+
         public enum Status {
             Talking,
             Muted,

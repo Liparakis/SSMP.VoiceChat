@@ -11,7 +11,7 @@ namespace SsmpVoiceChat.Client;
 /// </summary>
 public class ClientVoiceChat {
 
-    VoiceStatusIcon VoiceStatusIcon;
+    VoiceStatusIcon? VoiceStatusIcon;
     /// <summary>
     /// The logger instance for logging information.
     /// </summary>
@@ -67,7 +67,6 @@ public class ClientVoiceChat {
         _netManager = new ClientNetManager(addon, clientApi.NetClient);
         _micManager = new MicrophoneManager();
 
-        VoiceStatusIcon = new VoiceStatusIcon();
         _soundManager = new SoundManager();
     }
 
@@ -91,8 +90,8 @@ public class ClientVoiceChat {
             _clientApi.UiManager.ChatBox.AddMessage($"Microphone is now {(_muted ? "" : "un")}muted");
             if (!_muted && Muted) _clientApi.UiManager.ChatBox.AddMessage($"Push To Talk is still enabled.");
 
-            if (!Muted) VoiceStatusIcon.SetTalking(VoiceStatusIcon.Status.NotTalking);
-            else VoiceStatusIcon.SetTalking(VoiceStatusIcon.Status.Muted);
+            if (!Muted) VoiceStatusIcon?.SetTalking(VoiceStatusIcon.Status.NotTalking);
+            else VoiceStatusIcon?.SetTalking(VoiceStatusIcon.Status.Muted);
         };
 
         ReloadAudio();
@@ -113,6 +112,7 @@ public class ClientVoiceChat {
     private void OnConnect() {
         Logger.Debug("Client is connected, starting mic capture");
 
+        VoiceStatusIcon = new VoiceStatusIcon();
         _micManager.Start();
         _micManager.VoiceDataEvent += OnVoiceGenerated;
         _micManager.VoiceOffEvent += OnVoiceStopped;
@@ -125,6 +125,8 @@ public class ClientVoiceChat {
     private void OnDisconnect() {
         Logger.Debug("Client is disconnected, stopping mic capture");
 
+        VoiceStatusIcon?.DestroyIcon();
+        VoiceStatusIcon = null;
         _micManager.VoiceDataEvent -= OnVoiceGenerated;
         _micManager.Stop();
     }
@@ -137,15 +139,15 @@ public class ClientVoiceChat {
     private void OnVoiceGenerated(byte[] data) {
         if (!_clientApi.NetClient.IsConnected) return;
         if (!Muted) {
-            VoiceStatusIcon.SetTalking(VoiceStatusIcon.Status.Talking);
+            VoiceStatusIcon?.SetTalking(VoiceStatusIcon.Status.Talking);
             _netManager.SendVoiceData(data);
         } else {
-            VoiceStatusIcon.SetTalking(VoiceStatusIcon.Status.Muted);
+            VoiceStatusIcon?.SetTalking(VoiceStatusIcon.Status.Muted);
         }
     }
     
     private void OnVoiceStopped() { 
-        if (!Muted) VoiceStatusIcon.SetTalking(VoiceStatusIcon.Status.NotTalking);
+        if (!Muted) VoiceStatusIcon?.SetTalking(VoiceStatusIcon.Status.NotTalking);
     }
 
     /// <summary>
