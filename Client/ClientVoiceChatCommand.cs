@@ -123,25 +123,20 @@ public class ClientVoiceChatCommand : IClientCommand {
     /// Handle the device list sub-command.
     /// </summary>
     private void HandleDeviceList(string[] args) {
-        void SendUsage() {
-            _chatBox.AddMessage($"Invalid usage: {Trigger} devices <mics|speakers>");
-        }
-
         var type = "";
         if (args.Length >= 4) {
             type = args[3];
         }
 
-        if (type is "") {
-            SendMicList();
-            _chatBox.AddMessage("");
-            SendSpeakerList();
-        } else if (type is "mics" or "mic" or "") {
+        _chatBox.AddMessage("If you don't see the device you want in the config, you'll have to reload the game.");
+        if (type is "mics" or "mic" or "") {
             SendMicList();
         } else if (type is "speakers" or "speaker") {
             SendSpeakerList();
         } else {
-            SendUsage();
+            SendMicList();
+            _chatBox.AddMessage("");
+            SendSpeakerList();
         }
     }
 

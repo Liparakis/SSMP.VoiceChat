@@ -1,5 +1,6 @@
 ﻿using BepInEx.Configuration;
 using SsmpVoiceChat.Client.Voice;
+using SsmpVoiceChat.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,14 @@ internal class ModSettings {
     /// <summary>
     /// The name of the microphone device currently used.
     /// </summary>
-    public string MicrophoneDeviceName => _microphoneDevice?.Value ?? "";
+    public string MicrophoneDeviceName { get
+        {
+            var value = _microphoneDevice?.Value ?? "";
+            if (value == SystemDeviceName) return Voice.Microphone.GetDefaultMicrophone();
+
+            return value;
+        }
+    }
     /// <summary>
     /// Event that is called when the microphone is set. The parameter of the action is the device name of the
     /// microphone.
@@ -27,23 +35,30 @@ internal class ModSettings {
     /// <summary>
     /// The name of the speaker device currently used.
     /// </summary>
-    public string SpeakerDeviceName => _speakerDevice?.Value ?? "";
+    public string SpeakerDeviceName { get
+        {
+            var value = _speakerDevice?.Value ?? "";
+            if (value == SystemDeviceName) return SoundManager.GetDefaultDeviceSpeaker();
+
+            return value;
+        }
+    }
     /// <summary>
     /// Event that is called when the speaker is set. The parameter of the action is the device name of the speaker.
     /// </summary>
     public event Action<string> SetSpeakerEvent = (s) => { };
 
-    ConfigEntry<float> _microphoneAmplification;
+    ConfigEntry<int> _microphoneAmplification;
     /// <summary>
     /// The microphone amplification for modifying the volume of the microphone input.
     /// </summary>
-    public float MicrophoneAmplification => Mathf.Clamp(_microphoneAmplification.Value, 0, 4);
+    public float MicrophoneAmplification => Mathf.Clamp(_microphoneAmplification.Value / 5, 0, 3);
 
-    ConfigEntry<float> _voiceChatVolume;
+    ConfigEntry<int> _voiceChatVolume;
     /// <summary>
     /// The volume of the voice chat of other players.
     /// </summary>
-    public float VoiceChatVolume => Mathf.Clamp(_voiceChatVolume.Value, 0, 4);
+    public float VoiceChatVolume => Mathf.Clamp(_voiceChatVolume.Value / 5, 0, 3);
 
     ConfigEntry<bool> _smoothChannelTransition;
     /// <summary>
@@ -66,31 +81,33 @@ internal class ModSettings {
     ConfigEntry<float> _rolloffFactor;
     public float RolloffFactor => _rolloffFactor.Value;
 
-    const string SystemDeviceName = "System Default";
+    public const string SystemDeviceName = "System Default";
 
     public ModSettings(ConfigFile config) {
         // Microphone
         var mics = Voice.Microphone.GetAllMicrophones();
+        //mics = mics.Prepend(SystemDeviceName).ToList();
         mics.Insert(0, SystemDeviceName);
-        var micDesc = new ConfigDescription("The ID of the microphone device currently used.", new AcceptableValueList<string>(mics.ToArray()));
-        _microphoneDevice = config.Bind<string>("Devices", "Microphone ID", SystemDeviceName, micDesc);
-        _microphoneDevice.SettingChanged += OnMicrophoneIdChanged;
-        OnMicrophoneIdChanged(null, null);
+        var micDesc = new ConfigDescription("The microphone device currently used.", new AcceptableValueList<string>(mics.ToArray()));
+        _microphoneDevice = config.Bind<string>("Devices", "Microphone", SystemDeviceName, micDesc);
+        _microphoneDevice.SettingChanged += OnMicrophoneChanged;
+        OnMicrophoneChanged(null, null);
 
         // Speaker
         var speakers = SoundManager.GetAllDeviceSpeakers();
+        //speakers = speakers.Prepend(SystemDeviceName).ToList();
         speakers.Insert(0, SystemDeviceName);
-        var speakerDesc = new ConfigDescription("The ID of the speaker device currently used.", new AcceptableValueList<string>(speakers.ToArray()));
-        _speakerDevice = config.Bind<string>("Devices", "Speaker ID", SystemDeviceName, speakerDesc);
-        _speakerDevice.SettingChanged += OnSpeakerIdChanged;
-        OnSpeakerIdChanged(null, null);
+        var speakerDesc = new ConfigDescription("The speaker device currently used.", new AcceptableValueList<string>(speakers.ToArray()));
+        _speakerDevice = config.Bind<string>("Devices", "Speaker", SystemDeviceName, speakerDesc);
+        _speakerDevice.SettingChanged += OnSpeakerChanged;
+        OnSpeakerChanged(null, null);
 
         // Volume
-        var ampDesc = new ConfigDescription("Modifies the volume of the microphone input.", new AcceptableValueRange<float>(0, 4));
-        _microphoneAmplification = config.Bind<float>("Volume", "Microphone Amplification", 1, ampDesc);
+        var ampDesc = new ConfigDescription("Modifies the volume of the microphone input.", new AcceptableValueRange<int>(0, 15));
+        _microphoneAmplification = config.Bind<int>("Volume", "Microphone Amplification", 5, ampDesc);
 
-        var volumeDesc = new ConfigDescription("The volume of the voice chat of other players.", new AcceptableValueRange<float>(0, 6));
-        _voiceChatVolume = config.Bind<float>("Volume", "Chat Volume", 1, volumeDesc);
+        var volumeDesc = new ConfigDescription("The volume of the voice chat of other players.", new AcceptableValueRange<int>(0, 15));
+        _voiceChatVolume = config.Bind<int>("Volume", "Chat Volume", 5, volumeDesc);
         _smoothChannelTransition = config.Bind<bool>("Volume", "Smooth Channel Transition", true, "Whether the transition between audio from a player moving from the left to the right of the local player is smooth or not");
 
         // Keybinds
@@ -102,19 +119,19 @@ internal class ModSettings {
     }
 
     string prevMicValue = "";
-    private void OnMicrophoneIdChanged(object sender, EventArgs e)
+    private void OnMicrophoneChanged(object sender, EventArgs e)
     {
         if (MicrophoneDeviceName == prevMicValue) return;
         prevMicValue = MicrophoneDeviceName;
 
         var name = MicrophoneDeviceName;
-        if (name == SystemDeviceName) name = Voice.Microphone.GetDefaultMicrophone();
 
         var hasMic = Voice.Microphone.GetAllMicrophones().Contains(name);
         if (!hasMic)
         {
             VoiceChatMod.ChatBox?.AddMessage($"[VC]: Couldn't find a microphone with the name {name}");
-            ClientVoiceChat.Logger.Error($"[VC]: Couldn't find a microphone with the name {name}");
+            ClientVoiceChat.Logger?.Error($"[VC]: Couldn't find a microphone with the name {name}");
+            //Debug.LogError($"[VC]: Couldn't find a microphone with the name {name}");
             return;
         }
 
@@ -123,19 +140,19 @@ internal class ModSettings {
 
 
     string prevSpeakerValue = "";
-    private void OnSpeakerIdChanged(object sender, EventArgs e)
+    private void OnSpeakerChanged(object sender, EventArgs e)
     {
         if (SpeakerDeviceName == prevSpeakerValue) return;
         prevSpeakerValue = SpeakerDeviceName;
 
-        var name = MicrophoneDeviceName;
-        if (name == SystemDeviceName) name = SoundManager.GetDefaultDeviceSpeaker();
+        var name = SpeakerDeviceName;
 
         var hasSpeaker = SoundManager.GetAllDeviceSpeakers().Contains(name);
         if (!hasSpeaker)
         {
             VoiceChatMod.ChatBox?.AddMessage($"[VC]: Couldn't find a speaker with the name {name}");
-            ClientVoiceChat.Logger.Error($"[VC]: Couldn't find a speaker with the name {name}");
+            ClientVoiceChat.Logger?.Error($"[VC]: Couldn't find a speaker with the name {name}");
+            //Debug.LogError($"[VC]: Couldn't find a speaker with the name {name}");
             return;
         }
 
