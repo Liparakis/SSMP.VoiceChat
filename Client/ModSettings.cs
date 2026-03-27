@@ -52,13 +52,13 @@ internal class ModSettings {
     /// <summary>
     /// The microphone amplification for modifying the volume of the microphone input.
     /// </summary>
-    public float MicrophoneAmplification => Mathf.Clamp(_microphoneAmplification.Value / 5, 0, 3);
+    public float MicrophoneAmplification => Mathf.Clamp((float)_microphoneAmplification.Value / 5, 0, 3);
 
     ConfigEntry<int> _voiceChatVolume;
     /// <summary>
     /// The volume of the voice chat of other players.
     /// </summary>
-    public float VoiceChatVolume => Mathf.Clamp(_voiceChatVolume.Value / 5, 0, 3);
+    public float VoiceChatVolume => Mathf.Clamp((float)_voiceChatVolume.Value / 10, 0, 1);
 
     ConfigEntry<bool> _smoothChannelTransition;
     /// <summary>
@@ -76,10 +76,10 @@ internal class ModSettings {
 
 
     ConfigEntry<float> _maxDistance;
-    public float MaxDistance => _maxDistance.Value;
+    public float MaxDistance => _maxDistance?.Value ?? 60;
 
     ConfigEntry<float> _rolloffFactor;
-    public float RolloffFactor => _rolloffFactor.Value;
+    public float RolloffFactor => _rolloffFactor?.Value ?? 1.5f;
 
     public const string SystemDeviceName = "System Default";
 
@@ -106,8 +106,8 @@ internal class ModSettings {
         var ampDesc = new ConfigDescription("Modifies the volume of the microphone input.", new AcceptableValueRange<int>(0, 15));
         _microphoneAmplification = config.Bind<int>("Volume", "Microphone Amplification", 5, ampDesc);
 
-        var volumeDesc = new ConfigDescription("The volume of the voice chat of other players.", new AcceptableValueRange<int>(0, 15));
-        _voiceChatVolume = config.Bind<int>("Volume", "Chat Volume", 5, volumeDesc);
+        var volumeDesc = new ConfigDescription("The volume of the voice chat of other players.", new AcceptableValueRange<int>(0, 10));
+        _voiceChatVolume = config.Bind<int>("Volume", "Chat Volume", 6, volumeDesc);
         _smoothChannelTransition = config.Bind<bool>("Volume", "Smooth Channel Transition", true, "Whether the transition between audio from a player moving from the left to the right of the local player is smooth or not");
 
         // Keybinds

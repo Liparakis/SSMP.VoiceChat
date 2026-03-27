@@ -57,7 +57,7 @@ public class Speaker {
 
         AL.DistanceModel(ALDistanceModel.LinearDistance);
         SoundManager.CheckAlError(2);
-        AL.Source(_source, ALSourcef.MaxDistance, DefaultMaxDistance);
+        AL.Source(_source, ALSourcef.MaxDistance, VoiceChatMod.ModSettings.MaxDistance);
         SoundManager.CheckAlError(3);
         AL.Source(_source, ALSourcef.ReferenceDistance, 0f);
         SoundManager.CheckAlError(4);
@@ -78,15 +78,13 @@ public class Speaker {
     /// positionally.</param>
     /// <param name="maxDistance">The maximum distance the audio should be heard from. If <paramref name="position"/>
     /// is supplied this max distance will determine the relative volume of the audio.</param>
-    public void Play(byte[] encodedData, float volume = 1f, Vector3? position = null) {
-        var maxDistance = VoiceChatMod.ModSettings.MaxDistance;
-
+    public void Play(byte[] encodedData, Vector3? position = null) {
         var byteData = _decoder.Decode(encodedData);
         var data = DataUtils.BytesToShorts(byteData);
         
         RemoveProcessedBuffers();
 
-        Write(data, volume, position, maxDistance);
+        Write(data, position);
 
         var buffers = GetQueuedBuffers();
         var stopped = GetState() == ALSourceState.Initial || GetState() == ALSourceState.Stopped || buffers <= 1;
@@ -106,10 +104,12 @@ public class Speaker {
     /// positionally.</param>
     /// <param name="maxDistance">The maximum distance the audio should be heard from. If <paramref name="position"/>
     /// is supplied this max distance will determine the relative volume of the audio.</param>
-    private void Write(short[] data, float volume, Vector3? position, float maxDistance) {
-        SetPosition(position, maxDistance);
+    private void Write(short[] data, Vector3? position) {
+        SetPosition(position);
+        var volume = VoiceChatMod.ModSettings.VoiceChatVolume;
 
-        AL.Source(_source, ALSourcef.MaxGain, 0.6f);
+
+        AL.Source(_source, ALSourcef.MaxGain, 1f);
         SoundManager.CheckAlError(0);
         AL.Source(_source, ALSourcef.Gain, volume);
         SoundManager.CheckAlError(1);
@@ -139,7 +139,8 @@ public class Speaker {
     /// Set linear attenuation (linear volume drop-off) with the given max distance.
     /// </summary>
     /// <param name="maxDistance">The maximum distance as a float.</param>
-    private void LinearAttenuation(float maxDistance) {
+    private void LinearAttenuation() {
+        var maxDistance = VoiceChatMod.ModSettings.MaxDistance;
         AL.DistanceModel(ALDistanceModel.LinearDistance);
         SoundManager.CheckAlError(0);
         AL.Source(_source, ALSourcef.MaxDistance, maxDistance);
@@ -152,8 +153,7 @@ public class Speaker {
     /// Set the position of the audio source.
     /// </summary>
     /// <param name="soundPos">The position as a float vector.</param>
-    /// <param name="maxDistance">The maximum distance for positionally played audio.</param>
-    private void SetPosition(Vector3? soundPos, float maxDistance) {
+    private void SetPosition(Vector3? soundPos) {
         AL.Listener(ALListener3f.Position, 0f, 0f, 0f);
         SoundManager.CheckAlError(0);
 
@@ -165,17 +165,17 @@ public class Speaker {
             var x = soundPos.X;
             var y = soundPos.Y;
             var z = soundPos.Z;
-            if (VoiceChatMod.ModSettings.SmoothChannelTransition && x is < 15f and > -15f) {
-                z = (float) -Math.Sqrt(25f - Math.Pow(x, 2));
+            if (VoiceChatMod.ModSettings.SmoothChannelTransition) {
+                z = -5f;
             }
 
-            LinearAttenuation(maxDistance);
-            AL.Source(_source, ALSourceb.SourceRelative, false);
+            LinearAttenuation();
+            AL.Source(_source, ALSourceb.SourceRelative, true);
             SoundManager.CheckAlError(2);
             AL.Source(_source, ALSource3f.Position, x, y, z);
             SoundManager.CheckAlError(3);
         } else {
-            LinearAttenuation(VoiceChatMod.ModSettings.MaxDistance);
+            LinearAttenuation();
             AL.Source(_source, ALSourceb.SourceRelative, true);
             SoundManager.CheckAlError(4);
             AL.Source(_source, ALSource3f.Position, 0f, 0f, 0f);

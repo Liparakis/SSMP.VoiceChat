@@ -180,23 +180,21 @@ public class ClientVoiceChat {
             return;
         }
 
-        var volume = VoiceChatMod.ModSettings.VoiceChatVolume;
-
         if (!proximity) {
-            speaker.Play(data, volume);
+            speaker.Play(data);
             return;
         }
 
         var hc = HeroController.instance;
         if (hc == null || hc.gameObject == null) {
             Logger.Warn("Local player could not be found, cannot play voice positionally");
-            speaker.Play(data, volume);
+            speaker.Play(data);
             return;
         }
 
         if (!_clientApi.ClientManager.TryGetPlayer(id, out var player)) {
             Logger.Warn($"No player found for '{id}', cannot play voice positionally");
-            speaker.Play(data, volume);
+            speaker.Play(data);
             return;
         }
 
@@ -207,7 +205,7 @@ public class ClientVoiceChat {
 
         var pos = remotePos - localPos;
 
-        speaker.Play(data, volume, new SSMP.Math.Vector3(pos.x, pos.y, pos.z));
+        speaker.Play(data, new SSMP.Math.Vector3(pos.x, pos.y, pos.z));
     }
 
     /// <summary>
@@ -217,6 +215,8 @@ public class ClientVoiceChat {
         _micManager.Stop();
         _soundManager.Close();
         _soundManager.Open();
+
+        Logger.Debug("Reloading Audio");
 
         if (_clientApi.NetClient.IsConnected) {
             _micManager.Start();
