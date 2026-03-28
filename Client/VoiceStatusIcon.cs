@@ -1,9 +1,6 @@
 ﻿using GlobalEnums;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,12 +12,15 @@ namespace SsmpVoiceChat.Client
         Sprite Unmuted;
         //Sprite Muted;
         //Sprite MicNotFound;
-        GameObject MicrophoneIcons;
+        GameObject? MicrophoneIcons;
         SpriteRenderer TalkingIndicator;
         Status CurrentStatus = Status.NotTalking;
         public VoiceStatusIcon() {
             CreateSprites();
             CreateIconObject();
+
+            VoiceChatMod.ModSettings.OnTalkingIndicatorToggled += OnIndicatorToggled;
+            OnIndicatorToggled();
         }
 
         GameObject FindChild(Transform currentObject, string path) {
@@ -102,7 +102,19 @@ namespace SsmpVoiceChat.Client
 
         public void DestroyIcon()
         {
-            if (MicrophoneIcons != null) GameObject.Destroy(MicrophoneIcons);
+            if (MicrophoneIcons != null)
+            {
+                GameObject.Destroy(MicrophoneIcons);
+                MicrophoneIcons = null;
+                VoiceChatMod.ModSettings.OnTalkingIndicatorToggled -= OnIndicatorToggled;
+            }
+        }
+
+        void OnIndicatorToggled()
+        {
+            if (MicrophoneIcons == null) return;
+            var setting = VoiceChatMod.ModSettings.TalkingIndicator;
+            MicrophoneIcons.SetActive(setting);
         }
 
         public enum Status {

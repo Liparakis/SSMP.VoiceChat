@@ -74,6 +74,9 @@ internal class ModSettings {
     /// </summary>
     public KeyCode PushToTalkKey => _pushToTalkKey.Value;
 
+    private ConfigEntry<bool> _talkingIndicator;
+    public event Action OnTalkingIndicatorToggled;
+    public bool TalkingIndicator => _talkingIndicator?.Value ?? true;
 
     ConfigEntry<float> _maxDistance;
     public float MaxDistance => _maxDistance?.Value ?? 60;
@@ -112,6 +115,10 @@ internal class ModSettings {
 
         // Keybinds
         _pushToTalkKey = config.Bind<KeyCode>("Keybinds", "Push To Talk", KeyCode.None, "The key to press to enable your microphone. Set to None to disable push to talk");
+
+        _talkingIndicator = config.Bind<bool>("Visuals", "Mic Status Indicator", true, "Whether the microphone icon should be displayed or not");
+        _talkingIndicator.SettingChanged += (a, b) => OnTalkingIndicatorToggled?.Invoke();
+
 
         // Testing
         _maxDistance = config.Bind<float>("Testing", "Max Distance", 60);
