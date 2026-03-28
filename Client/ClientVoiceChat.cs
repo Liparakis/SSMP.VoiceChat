@@ -2,7 +2,9 @@ using SSMP.Api.Client;
 using SSMP.Logging;
 using SSMP.Math;
 using SsmpVoiceChat.Client.Voice;
+using TeamCherry.Localization;
 using UnityEngine;
+using static Mono.Security.X509.X520;
 
 namespace SsmpVoiceChat.Client;
 
@@ -84,6 +86,11 @@ public class ClientVoiceChat {
             ReloadAudio();
         };
 
+        VoiceChatMod.ModSettings.SetMicFail += () =>
+        {
+            VoiceStatusIcon?.SetTalking(VoiceStatusIcon.Status.Error);
+        };
+
         voiceChatCommand.ToggleMuteEvent += () => {
             _muted = !_muted;
 
@@ -91,7 +98,8 @@ public class ClientVoiceChat {
             if (!_muted && Muted) _clientApi.UiManager.ChatBox.AddMessage($"Push To Talk is still enabled.");
 
             if (!Muted) VoiceStatusIcon?.SetTalking(VoiceStatusIcon.Status.NotTalking);
-            else VoiceStatusIcon?.SetTalking(VoiceStatusIcon.Status.Muted);
+            else if (_muted) VoiceStatusIcon?.SetTalking(VoiceStatusIcon.Status.Muted);
+            else VoiceStatusIcon?.SetTalking(VoiceStatusIcon.Status.PushMuted);
         };
 
         ReloadAudio();
@@ -141,8 +149,10 @@ public class ClientVoiceChat {
         if (!Muted) {
             VoiceStatusIcon?.SetTalking(VoiceStatusIcon.Status.Talking);
             _netManager.SendVoiceData(data);
-        } else {
+        } else if (_muted) {
             VoiceStatusIcon?.SetTalking(VoiceStatusIcon.Status.Muted);
+        } else {
+            VoiceStatusIcon?.SetTalking(VoiceStatusIcon.Status.PushMuted);
         }
     }
     

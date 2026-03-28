@@ -10,8 +10,9 @@ namespace SsmpVoiceChat.Client
     {
         const int IMAGE_SIZE = 66;
         Sprite Unmuted;
-        //Sprite Muted;
-        //Sprite MicNotFound;
+        Sprite Muted;
+        SpriteRenderer MicStatus;
+        Sprite MicNotFound;
         GameObject? MicrophoneIcons;
         SpriteRenderer TalkingIndicator;
         Status CurrentStatus = Status.NotTalking;
@@ -86,6 +87,7 @@ namespace SsmpVoiceChat.Client
             sprite.sprite = Unmuted;
             sprite.sortingLayerName = "Over";
             sprite.sortingOrder = 1;
+            MicStatus = sprite;
 
             // Create speaking indicator
             var child = new GameObject("Speaking Indicator");
@@ -120,6 +122,7 @@ namespace SsmpVoiceChat.Client
         public enum Status {
             Talking,
             Muted,
+            PushMuted,
             NotTalking,
             Error
         }
@@ -129,12 +132,19 @@ namespace SsmpVoiceChat.Client
             CurrentStatus = talking;
 
             if (talking == Status.Talking) {
+                MicStatus.sprite = Unmuted;
                 TalkingIndicator.color = new Color(0.3f, 0.5f, 0.3f, 1);
             } else if (talking == Status.NotTalking) {
+                MicStatus.sprite = Unmuted;
                 TalkingIndicator.color = new Color(0.2f, 0.2f, 0.2f, 1);
             } else if (talking == Status.Muted) {
+                MicStatus.sprite = Muted;
+                TalkingIndicator.color = new Color(0.9f, 0.17f, 0.15f, 1);
+            } else if (talking == Status.PushMuted) {
+                MicStatus.sprite = Unmuted;
                 TalkingIndicator.color = new Color(0.9f, 0.17f, 0.15f, 1);
             } else {
+                MicStatus.sprite = MicNotFound;
                 TalkingIndicator.color = new Color(0.5f, 0.15f, 0.9f, 1);
             }
         }
@@ -149,8 +159,8 @@ namespace SsmpVoiceChat.Client
 
             var pivot = new Vector2(0.5f, 0.5f);
             Unmuted = Sprite.Create(texture, new Rect(0, 0, IMAGE_SIZE, IMAGE_SIZE), pivot);
-            //Muted = Sprite.Create(texture, new Rect(IMAGE_SIZE, 0, IMAGE_SIZE, IMAGE_SIZE), pivot);
-            //MicNotFound = Sprite.Create(texture, new Rect(IMAGE_SIZE * 2, 0, IMAGE_SIZE, IMAGE_SIZE), pivot);
+            Muted = Sprite.Create(texture, new Rect(IMAGE_SIZE, 0, IMAGE_SIZE, IMAGE_SIZE), pivot);
+            MicNotFound = Sprite.Create(texture, new Rect(IMAGE_SIZE * 2, 0, IMAGE_SIZE, IMAGE_SIZE), pivot);
         }
     }
 }

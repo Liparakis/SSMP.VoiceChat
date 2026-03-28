@@ -44,6 +44,8 @@ internal class ModSettings {
     /// </summary>
     public event Action<string> SetSpeakerEvent = (s) => { };
 
+    public event Action SetMicFail;
+
     ConfigEntry<int> _microphoneAmplification;
     /// <summary>
     /// The microphone amplification for modifying the volume of the microphone input.
@@ -123,19 +125,17 @@ internal class ModSettings {
 #endif
     }
 
-    string prevMicValue = "";
     private void OnMicrophoneChanged(object sender, EventArgs e)
     {
-        if (MicrophoneDeviceName == prevMicValue) return;
-        prevMicValue = MicrophoneDeviceName;
-
         var name = MicrophoneDeviceName;
 
         var hasMic = Voice.Microphone.GetAllMicrophones().Contains(name);
+        ClientVoiceChat.Logger?.Info(string.Join(", ", Voice.Microphone.GetAllMicrophones()));
         if (!hasMic)
         {
             VoiceChatMod.ChatBox?.AddMessage($"[VC]: Couldn't find a microphone with the name {name}");
             ClientVoiceChat.Logger?.Error($"[VC]: Couldn't find a microphone with the name {name}");
+            SetMicFail?.Invoke();
             return;
         }
 
@@ -143,12 +143,8 @@ internal class ModSettings {
     }
 
 
-    string prevSpeakerValue = "";
     private void OnSpeakerChanged(object sender, EventArgs e)
     {
-        if (SpeakerDeviceName == prevSpeakerValue) return;
-        prevSpeakerValue = SpeakerDeviceName;
-
         var name = SpeakerDeviceName;
 
         var hasSpeaker = SoundManager.GetAllDeviceSpeakers().Contains(name);

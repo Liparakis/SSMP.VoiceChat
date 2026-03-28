@@ -24,10 +24,10 @@ public partial class VoiceChatMod : BaseUnityPlugin {
     internal static IChatBox ChatBox;
 
     const string url = "https://www.openal.org/downloads";
-    bool errored = false;
 
     /// <inheritdoc />
     public void Awake() {
+        // Catch if the player doesn't have OpenAL installed
         try
         {
             Alc.GetError(IntPtr.Zero);
@@ -36,14 +36,14 @@ public partial class VoiceChatMod : BaseUnityPlugin {
         {
             try
             {
+                // Open download link in browser
                 Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
             }
             catch { }
             Logger.LogError($"OpenAL not installed. Please install at {url}");
-            errored = true;
+            SceneManager.sceneLoaded += OpenALErrorWarning;
         }
 
-        SceneManager.sceneLoaded += OpenALErrorWarning;
         ClientAddon.RegisterAddon(new VoiceChatClientAddon());
         ServerAddon.RegisterAddon(new VoiceChatServerAddon());
         ModSettings = new ModSettings(Config);
@@ -54,12 +54,12 @@ public partial class VoiceChatMod : BaseUnityPlugin {
         if (scene.name != "Menu_Title") return;
         SceneManager.sceneLoaded -= OpenALErrorWarning;
 
-        Logger.LogWarning(errored);
-        if (!errored) return;
-
+        // Create copy of one of the buttons
         var canvas = UIManager.instance.UICanvas.transform;
         var example = canvas.Find("MainMenuScreen").GetChild(0).GetChild(0).GetChild(0);
         var textGO = GameObject.Instantiate(example, canvas);
+
+        // Remove components
         if (textGO.TryGetComponent<ContentSizeFitter>(out var fitter))
         {
             Component.DestroyImmediate(fitter);
@@ -70,15 +70,17 @@ public partial class VoiceChatMod : BaseUnityPlugin {
             Component.DestroyImmediate(align);
         }
 
+        // Set position and size
         var rect = textGO.GetComponent<RectTransform>();
         rect.sizeDelta = new Vector2(1055, 300);
         textGO.SetLocalPosition2D(0, 190);
 
+        // Set text
         var text = textGO.GetComponent<Text>();
         text.text = $"You need to install OpenAL for SSMP Voice Chat to work. Download at OpenAL.org";
         text.lineSpacing = 1;
 
-
+        // Disable title so the warning can be read
         var title = scene.GetRootGameObjects().FirstOrDefault(go => go.name == "LogoTitle");
         if (title != null)
         {
