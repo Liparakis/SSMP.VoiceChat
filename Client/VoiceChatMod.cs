@@ -34,6 +34,7 @@ public partial class VoiceChatMod : BaseUnityPlugin {
         }
         catch (DllNotFoundException)
         {
+#if DEBUG == false
             try
             {
                 // Open download link in browser
@@ -43,6 +44,7 @@ public partial class VoiceChatMod : BaseUnityPlugin {
             Logger.LogError($"OpenAL not installed. Please install at {url}");
             SceneManager.sceneLoaded += OpenALErrorWarning;
         }
+#endif
 
         ClientAddon.RegisterAddon(new VoiceChatClientAddon());
         ServerAddon.RegisterAddon(new VoiceChatServerAddon());
@@ -75,17 +77,24 @@ public partial class VoiceChatMod : BaseUnityPlugin {
         rect.sizeDelta = new Vector2(1055, 300);
         textGO.SetLocalPosition2D(0, 190);
 
+        var parent = new GameObject("Warning Background");
+        parent.transform.parent = canvas;
+        parent.transform.position = textGO.position;
+        parent.transform.SetScale2D(Vector2.one);
+        rect = parent.AddComponentIfNotPresent<RectTransform>();
+        rect.sizeDelta = new Vector2(1055, 300);
+
+        var image = parent.AddComponent<Image>();
+        image.color = new Color(.34f, .34f, .34f, 0.8f);
+
+        textGO.SetParentReset(parent.transform);
+        textGO.SetPositionZ(-15);
+
         // Set text
         var text = textGO.GetComponent<Text>();
         text.text = $"You need to install OpenAL for SSMP Voice Chat to work. Download at OpenAL.org";
         text.lineSpacing = 1;
 
-        // Disable title so the warning can be read
-        var title = scene.GetRootGameObjects().FirstOrDefault(go => go.name == "LogoTitle");
-        if (title != null)
-        {
-            var renderer = title.GetComponent<SpriteRenderer>();
-            renderer.enabled = false;
-        }
+
     }
 }
