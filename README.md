@@ -1,18 +1,21 @@
 # SSMP Voice Chat
 A mod and SSMP addon that implements voice chat between players.
 
-## How it works
-SSMP Voice Chat works using a few libraries to facilitate voice chat:
-- [OpenAL](https://www.openal.org/): To record and play audio positionally
-- [Opus](https://opus-codec.org/): Audio codec to efficiently encode audio for networking
-- [RNNoise](https://jmvalin.ca/demo/rnnoise/): Lightweight neural network that filters out noise from audio
-
-SSMP Voice Chat uses the SSMP API to network audio data and the server addon takes care of delivering the audio to the
-correct clients based on the server configuration.
+### Features:
+- Room, team, and global communication
+- Positional audio
+- Push to talk (see [Usage](#usage))
 
 ## Install
 ### Client
-SSMP.VoiceChat requires that it is installed on both the server and the client.
+Make sure that you have OpenAL installed.
+It's a library program that facilitates recording and playing audio (positionally).
+To install it:
+- **Windows**: Go to [OpenAL.org](https://www.openal.org/downloads/) and download and run the installer.
+- **Linux**: Most likely already installed with your distribution. Otherwise, use the package manager to install it.
+
+
+SSMP.VoiceChat needs to be installed on both the server and the client.
 If you host from in-game, simply install the mod and start hosting.
 To install it on your client, you should put the contents of the `SSMP.VoiceChat.zip` in your `Plugins/` folder,
 such that you have the folder `Plugins/SSMP.VoiceChat/` with the file `SSMPVoiceChat.dll` in it (and a bunch of others).
@@ -23,13 +26,7 @@ Your install may be in a different location):
 - **Mac**: `~/Library/Application Support/Steam/steamapps/common/Hollow Knight Silksong/BepInEx/plugins/`,
 - **Linux**: `~/.local/share/Steam/steamapps/common/Hollow Knight Silksong/BepInEx/plugins/`
 
-Make sure that you have OpenAL installed.
-It's a library program that facilitates recording and playing audio (positionally).
-To install it:
-- **Windows**: Go to [OpenAL.org](https://www.openal.org/downloads/) and download and run the installer.
-- **Linux**: Most likely already installed with your distribution. Otherwise, use the package manager to install it.
-
-### Server
+### Standalone Server
 If you are hosting a standalone server, make sure to add the following files/directories to the server directory
 (these are included in the `.zip` file):
 - `SSMPVoiceChat.dll`
@@ -40,33 +37,28 @@ If you are hosting a standalone server, make sure to add the following files/dir
 
 ## Usage
 ### Client
-You can configure the voice chat with a few commands. For client configuration you can use the following:
+Configuration for most things, such as selecting a microphone or a speaker, are located in the BepInEx config.
+You can use [BepInEx Config Manager](https://thunderstore.io/c/hollow-knight-silksong/p/jakobhellermann/BepInExConfigurationManager/) or [ModMenu](https://thunderstore.io/c/hollow-knight-silksong/p/silksong_modding/ModMenu/) to access these settings.
+> Note that the list of devices can't be reloaded in-game. If you change your system's default mic/speaker, or plug one in, you'll need to relaunch the game to use it.
+
+#### Commands:
 - `/vcc mute` : Toggle mute your voice chat, such that other can(not) hear you.
 - `/vcc devices <mics|speakers>` : Lists the available microphones or speakers that can be used with voice chat. The IDs given in the output can be used in the mod configuration.
+
 
 ### Server
 For the server configuration you can use the commands below. Please note that these commands require the sender to be authorized in order to execute them.
 - `/vcs set <setting name> [value]` : Get or set the value of a voice chat server setting. The following settings can be used (along with their function):
-    - `proximity_based_volume` (aliases: `proximity`, `prox`): Whether the volume of voice chat should be based on the proximity of the source and listener.
+    - `proximity_based_volume` (aliases: `proximity`, `prox`): Whether the volume and position of voice chat should be based on the proximity of the source and listener.
     - `team_voices_globally` (aliases: `teamglobal`, `teamglobally`): Whether to hear your team's voices globally independent of proximity or scenes.
     - `team_voices_only` (aliases: `teamonly`): Whether to hear only your team's voices and not other teams, even if they are in the same scene or in close proximity.
 - `/vcs broadcast` : Toggle broadcasting your voice chat to the entire server.
 
-## Copyright and license
-SSMP.VoiceChat is a game modification for Hollow Knight: Silksong that adds voice chat to SSMP.  
-Copyright (C) 2025  Extremelyd1
+## How it works
+SSMP Voice Chat works using a few libraries to facilitate voice chat:
+- [OpenAL](https://www.openal.org/): To record and play audio positionally
+- [Opus](https://opus-codec.org/): Audio codec to efficiently encode audio for networking
+- [RNNoise](https://jmvalin.ca/demo/rnnoise/): Lightweight neural network that filters out noise from audio
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
-    USA
+SSMP Voice Chat uses the SSMP API to network audio data and the server addon takes care of delivering the audio to the
+correct clients based on the server configuration.
