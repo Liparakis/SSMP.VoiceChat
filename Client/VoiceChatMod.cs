@@ -4,6 +4,7 @@ using SSMP.Api.Client;
 using SSMP.Api.Server;
 using SsmpVoiceChat.Server;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -33,7 +34,11 @@ public partial class VoiceChatMod : BaseUnityPlugin {
         }
         catch (DllNotFoundException)
         {
-            //Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+            try
+            {
+                Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+            }
+            catch { }
             Logger.LogError($"OpenAL not installed. Please install at {url}");
             errored = true;
         }

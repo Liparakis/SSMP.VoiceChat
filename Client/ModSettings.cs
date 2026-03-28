@@ -1,10 +1,6 @@
 ﻿using BepInEx.Configuration;
 using SsmpVoiceChat.Client.Voice;
-using SsmpVoiceChat.Common;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace SsmpVoiceChat.Client;
@@ -121,8 +117,10 @@ internal class ModSettings {
 
 
         // Testing
+#if DEBUG
         _maxDistance = config.Bind<float>("Testing", "Max Distance", 60);
         _rolloffFactor = config.Bind<float>("Testing", "Rolloff Factor", 1.5f);
+#endif
     }
 
     string prevMicValue = "";
@@ -138,7 +136,6 @@ internal class ModSettings {
         {
             VoiceChatMod.ChatBox?.AddMessage($"[VC]: Couldn't find a microphone with the name {name}");
             ClientVoiceChat.Logger?.Error($"[VC]: Couldn't find a microphone with the name {name}");
-            //Debug.LogError($"[VC]: Couldn't find a microphone with the name {name}");
             return;
         }
 
