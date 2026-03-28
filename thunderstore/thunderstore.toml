@@ -5,7 +5,7 @@ schemaVersion = "0.0.1"
 # The name of the team you are publishing as
 namespace = "BobbyTheCatfish"
 # max 250 characters
-description = "Example mod description"
+description = "Communicate with other players with SSMP Voice Chat! Features proximity and team-based voice chatting."
 
 # Replace this with a correct repo URL if the default is not accurate
 websiteUrl = "https://github.com/BobbyTheCatfish/SSMP.VoiceChat"
@@ -27,6 +27,14 @@ outdir = "./dist"
 
 [[build.copy]]
 source = "./temp"
+target = "/"
+
+[[build.copy]]
+source = "../Natives"
+target = "/Natives"
+
+[[build.copy]]
+source = "../microphone_icons.png"
 target = "/"
 
 # additional files and directories can be added to the package like this:

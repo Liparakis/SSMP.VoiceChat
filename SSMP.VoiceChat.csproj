@@ -62,6 +62,12 @@
 		</Reference>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Update="microphone_icons.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 	<Target Name="CopyAndPackageMod" AfterTargets="PostBuildEvent">
 		<ItemGroup>
 			<Binaries Include="$(TargetPath)" LocalDir="/" PackDir="/" />
