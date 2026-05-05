@@ -124,6 +124,7 @@ public class ClientVoiceChat {
         _micManager.Start();
         _micManager.VoiceDataEvent += OnVoiceGenerated;
         _micManager.VoiceOffEvent += OnVoiceStopped;
+        ReloadAudio();
     }
 
     /// <summary>
@@ -137,6 +138,7 @@ public class ClientVoiceChat {
         VoiceStatusIcon = null;
         _micManager.VoiceDataEvent -= OnVoiceGenerated;
         _micManager.Stop();
+        _soundManager.Close();
     }
 
     /// <summary>

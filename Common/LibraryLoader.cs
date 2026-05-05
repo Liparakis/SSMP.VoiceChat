@@ -43,13 +43,13 @@ public static class LibraryLoader {
     [DllImport("kernel32", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true)]
     private static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
 
-    [DllImport("dl", CharSet = CharSet.Ansi)]
+    [DllImport("dl.so.2", CharSet = CharSet.Ansi)]
     private static extern IntPtr dlopen(string filename, int flags);
 
-    [DllImport("dl", CharSet = CharSet.Ansi)]
+    [DllImport("dl.so.2", CharSet = CharSet.Ansi)]
     private static extern void dlclose(IntPtr module);
 
-    [DllImport("dl", CharSet = CharSet.Ansi)]
+    [DllImport("dl.so.2", CharSet = CharSet.Ansi)]
     static extern IntPtr dlsym(IntPtr handle, string symbol);
 
     public static void UnloadAll() {

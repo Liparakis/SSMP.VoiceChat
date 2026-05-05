@@ -46,6 +46,8 @@
 		<Folder Remove="thunderstore/temp;thunderstore/dist" />
 		<Folder Include="Natives\" />
 		<Folder Include="Properties\" />
+		<Folder Include="thunderstore\dist\" />
+		<Folder Include="thunderstore\temp\" />
 		<None Include="README.md" Pack="True" PackagePath="README.md" />
 		<None Include="thunderstore/icon.png" Pack="True" PackagePath="icon.png" />
 	</ItemGroup>
@@ -64,6 +66,36 @@
 
 	<ItemGroup>
 	  <None Update="microphone_icons.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Natives\Linux\libopus.so.0">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Natives\Linux\librnnoise.so">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Natives\Linux\libwebrtcvad.so">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Natives\Mac\libopus.dylib">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Natives\Mac\librnnoise.dylib">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Natives\Mac\libwebrtcvad.dylib">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Natives\Windows\opus.dll">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Natives\Windows\rnnoise.dll">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Natives\Windows\webrtcvad.dll">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </None>
+	  <None Update="OpenTK.dll.config">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>

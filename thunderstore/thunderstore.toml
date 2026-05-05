@@ -1,5 +1,5 @@
 ﻿[config]
-schemaVersion = "0.0.1"
+schemaVersion = "0.1.2"
 
 [package]
 # The name of the team you are publishing as
@@ -32,6 +32,10 @@ target = "/plugins/"
 [[build.copy]]
 source = "../Natives"
 target = "/plugins/Natives"
+
+[[build.copy]]
+source = "../OpenTK.dll.config"
+target = "/plugins/"
 
 [[build.copy]]
 source = "../microphone_icons.png"

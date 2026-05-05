@@ -5,6 +5,6 @@ namespace SsmpVoiceChat;
 /// </summary>
 public static class Identifier {
     public const string AddonName = "ProximityChat";
-    public const string AddonVersion = "0.1.1";
+    public const string AddonVersion = "0.1.2";
     public const uint ApiVersion = 1;
 }
