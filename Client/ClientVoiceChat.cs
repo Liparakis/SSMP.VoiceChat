@@ -1,10 +1,6 @@
 using SSMP.Api.Client;
-using SSMP.Logging;
-using SSMP.Math;
 using SsmpVoiceChat.Client.Voice;
-using TeamCherry.Localization;
 using UnityEngine;
-using static Mono.Security.X509.X520;
 
 namespace SsmpVoiceChat.Client;
 
@@ -40,8 +36,6 @@ public class ClientVoiceChat {
     /// Whether the local player has their microphone muted
     /// </summary>
     private bool _muted;
-
-    private bool _pushToggle = false;
 
     /// <summary>
     /// Whether the local player has their microphone muted and Push To Talk engaged and thus should not send any voice data.
