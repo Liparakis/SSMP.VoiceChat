@@ -194,6 +194,8 @@ public class ClientVoiceChat {
     /// <param name="data">The voice data as a byte array.</param>
     /// <param name="proximity">Whether this voice data should be played back with proximity-based volume.</param>
     private void OnVoiceReceived(ushort id, byte[] data, bool proximity) {
+        EnableRemoteStatusIcon(id);
+
         if (!_soundManager.TryGetOrCreateSpeaker(id, out var speaker)) {
             Logger.Warn($"Could not get or create speaker for player '{id}', cannot play voice");
             return;
@@ -225,6 +227,25 @@ public class ClientVoiceChat {
         var pos = remotePos - localPos;
 
         speaker.Play(data, new SSMP.Math.Vector3(pos.x, pos.y, pos.z));
+    }
+
+    private void EnableRemoteStatusIcon(ushort id)
+    {
+        if (!_clientApi.ClientManager.TryGetPlayer(id, out var player)) {
+            Logger.Warn("Local player could not be found, cannot enable status indicator");
+            return;
+        }
+
+        if (player == null || !player.IsInLocalScene) return;
+
+        var container = player.PlayerContainer;
+        if (container == null) {
+            Logger.Warn("Local player could not be found, cannot enable status indicator");
+            return;
+        }
+
+        var icon =  RemoteStatusIndicator.GetIconOnPlayerContainer(container);
+        if (icon != null) icon.UpdateState(true);
     }
 
     /// <summary>

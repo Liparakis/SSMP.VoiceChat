@@ -24,7 +24,7 @@ namespace SsmpVoiceChat.Client
             OnIndicatorToggled();
         }
 
-        GameObject FindChild(Transform currentObject, string path) {
+        public static GameObject? FindChild(Transform currentObject, string path) {
             var objectNames = path.Split('/');
 
             foreach (var name in objectNames) {
@@ -37,6 +37,8 @@ namespace SsmpVoiceChat.Client
                         break;
                     }
                 }
+
+                if (currentObject.name != name) return null;
             }
 
             return currentObject.gameObject;
@@ -127,25 +129,30 @@ namespace SsmpVoiceChat.Client
             Error
         }
 
+        public static Color TalkingColor = new(0.3f, 0.5f, 0.3f, 1);
+        public static Color NotTalkingColor = new(0.2f, 0.2f, 0.2f, 1);
+        public static Color MutedColor = new(0.9f, 0.17f, 0.15f, 1);
+        public static Color ErrorColor = new(0.5f, 0.15f, 0.9f, 1);
+
         public void SetTalking(Status talking) {
             if (talking == CurrentStatus) return;
             CurrentStatus = talking;
 
             if (talking == Status.Talking) {
                 MicStatus.sprite = Unmuted;
-                TalkingIndicator.color = new Color(0.3f, 0.5f, 0.3f, 1);
+                TalkingIndicator.color = TalkingColor;
             } else if (talking == Status.NotTalking) {
                 MicStatus.sprite = Unmuted;
-                TalkingIndicator.color = new Color(0.2f, 0.2f, 0.2f, 1);
+                TalkingIndicator.color = NotTalkingColor;
             } else if (talking == Status.Muted) {
                 MicStatus.sprite = Muted;
-                TalkingIndicator.color = new Color(0.9f, 0.17f, 0.15f, 1);
+                TalkingIndicator.color = MutedColor;
             } else if (talking == Status.PushMuted) {
                 MicStatus.sprite = Unmuted;
-                TalkingIndicator.color = new Color(0.9f, 0.17f, 0.15f, 1);
+                TalkingIndicator.color = MutedColor;
             } else {
                 MicStatus.sprite = MicNotFound;
-                TalkingIndicator.color = new Color(0.5f, 0.15f, 0.9f, 1);
+                TalkingIndicator.color = ErrorColor;
             }
         }
 

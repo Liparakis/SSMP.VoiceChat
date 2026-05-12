@@ -56,6 +56,7 @@ There is an indicator in the upper left of the HUD that shows your current micro
 - Gray border: No sound detected.
 - Red border, mic with circle: You're muted with push to talk or push to toggle.
 - Red border, crossed out mic: You're muted with `/vcc mute`.
+- Purple border: Microphone error
 
 ### Server
 For the server configuration you can use the commands below. Please note that these commands require the sender to be authorized in order to execute them.
