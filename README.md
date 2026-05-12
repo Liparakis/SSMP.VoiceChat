@@ -4,7 +4,7 @@ A mod and SSMP addon that implements voice chat between players.
 ### Features:
 - Room, team, and global communication
 - Positional audio
-- Push to talk (see [Usage](#usage))
+- Push to talk / Push to toggle (see [Usage](#usage))
 
 ## Install
 ### Client
@@ -41,10 +41,21 @@ Configuration for most things, such as selecting a microphone or a speaker, are 
 You can use [BepInEx Config Manager](https://thunderstore.io/c/hollow-knight-silksong/p/jakobhellermann/BepInExConfigurationManager/) or [ModMenu](https://thunderstore.io/c/hollow-knight-silksong/p/silksong_modding/ModMenu/) to access these settings.
 > Note that the list of devices can't be reloaded in-game. If you change your system's default mic/speaker, or plug one in, you'll need to relaunch the game to use it.
 
-#### Commands:
+#### Input Modes
+- Normal: You don't have to press any buttons to talk!
+- Push to talk: Press and hold the selected key/button to enable your microphone. If the key isn't pressed, you're essentially muted.
+- Push to toggle: Press the selected key/button to enable or disable your microphone. It will toggle the current mute state.
+
+#### Commands
 - `/vcc mute` : Toggle mute your voice chat, such that other can(not) hear you.
 - `/vcc devices <mics|speakers>` : Lists the available microphones or speakers that can be used with voice chat. The IDs given in the output can be used in the mod configuration.
 
+#### Input Activity Icon
+There is an indicator in the upper left of the HUD that shows your current microphone status.
+- Green border: Sound detected.
+- Gray border: No sound detected.
+- Red border, mic with circle: You're muted with push to talk or push to toggle.
+- Red border, crossed out mic: You're muted with `/vcc mute`.
 
 ### Server
 For the server configuration you can use the commands below. Please note that these commands require the sender to be authorized in order to execute them.

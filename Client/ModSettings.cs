@@ -72,6 +72,9 @@ internal class ModSettings {
     /// </summary>
     public KeyCode PushToTalkKey => _pushToTalkKey.Value;
 
+    private ConfigEntry<InputMethod> _inputMode;
+    public InputMethod InputMode => _inputMode.Value;
+
     private ConfigEntry<bool> _talkingIndicator;
     public event Action OnTalkingIndicatorToggled;
     public bool TalkingIndicator => _talkingIndicator?.Value ?? true;
@@ -112,7 +115,9 @@ internal class ModSettings {
         _smoothChannelTransition = config.Bind<bool>("Volume", "Smooth Channel Transition", true, "Whether the transition between audio from a player moving from the left to the right of the local player is smooth or not");
 
         // Keybinds
-        _pushToTalkKey = config.Bind<KeyCode>("Keybinds", "Push To Talk", KeyCode.None, "The key to press to enable your microphone. Set to None to disable push to talk");
+        _pushToTalkKey = config.Bind<KeyCode>("Microphone Toggle", "Input Key", KeyCode.None, "The key to press to enable/toggle your microphone.");
+        _inputMode = config.Bind<InputMethod>("Microphone Toggle", "Input Mode", InputMethod.Normal, "The method for microphone input (Push to talk / toggle / normal)");
+        _inputMode.SettingChanged += (o, e) => VoiceChatMod.ToggleMuted = false;
 
         _talkingIndicator = config.Bind<bool>("Visuals", "Mic Status Indicator", true, "Whether the microphone icon should be displayed or not");
         _talkingIndicator.SettingChanged += (a, b) => OnTalkingIndicatorToggled?.Invoke();
@@ -157,5 +162,12 @@ internal class ModSettings {
         }
 
         SetSpeakerEvent?.Invoke(name);
+    }
+
+    internal enum InputMethod
+    {
+        Normal, 
+        PushToTalk,
+        PushToToggle
     }
 }

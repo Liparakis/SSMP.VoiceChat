@@ -5,7 +5,6 @@ using SSMP.Api.Server;
 using SsmpVoiceChat.Server;
 using System;
 using System.Diagnostics;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -22,6 +21,7 @@ public partial class VoiceChatMod : BaseUnityPlugin {
     /// </summary>
     internal static ModSettings ModSettings;
     internal static IChatBox ChatBox;
+    internal static bool ToggleMuted = false;
 
     const string url = "https://www.openal.org/downloads";
 
@@ -49,6 +49,17 @@ public partial class VoiceChatMod : BaseUnityPlugin {
         ClientAddon.RegisterAddon(new VoiceChatClientAddon());
         ServerAddon.RegisterAddon(new VoiceChatServerAddon());
         ModSettings = new ModSettings(Config);
+    }
+
+    void Update()
+    {
+        if (ModSettings.InputMode == ModSettings.InputMethod.PushToToggle)
+        {
+            if (Input.GetKeyDown(ModSettings.PushToTalkKey))
+            {
+                ToggleMuted = !ToggleMuted;
+            }
+        }
     }
 
     void OpenALErrorWarning(Scene scene, LoadSceneMode mode)

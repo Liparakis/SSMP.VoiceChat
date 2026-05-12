@@ -41,6 +41,8 @@ public class ClientVoiceChat {
     /// </summary>
     private bool _muted;
 
+    private bool _pushToggle = false;
+
     /// <summary>
     /// Whether the local player has their microphone muted and Push To Talk engaged and thus should not send any voice data.
     /// </summary>
@@ -50,7 +52,12 @@ public class ClientVoiceChat {
         {
             if (_muted) return true;
             var key = VoiceChatMod.ModSettings.PushToTalkKey;
-            if (key != KeyCode.None) return !Input.GetKey(key);
+            var mode = VoiceChatMod.ModSettings.InputMode;
+            if (key != KeyCode.None && mode != ModSettings.InputMethod.Normal)
+            {
+                if (mode == ModSettings.InputMethod.PushToTalk) return !Input.GetKey(key);
+                return VoiceChatMod.ToggleMuted;
+            }
 
             return false;
         }
