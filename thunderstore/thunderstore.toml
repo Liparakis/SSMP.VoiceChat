@@ -42,9 +42,9 @@ source = "../microphone_icons.png"
 target = "/plugins/"
 
 # additional files and directories can be added to the package like this:
-# [[build.copy]]
-# source = "./CHANGELOG.md"
-# target = "/plugins"
+[[build.copy]]
+source = "../CHANGELOG.md"
+target = "/"
 
 
 [publish]
