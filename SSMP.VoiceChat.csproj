@@ -38,6 +38,7 @@
 		<PackageReference Include="Hamunii.BepInEx.AutoPlugin" Version="2.0.1" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.Unity.Analyzers" Version="1.25.0" PrivateAssets="all" />
 		<PackageReference Include="OpenTK" Version="3.3.3" />
+		<PackageReference Include="Silksong.SSMP" Version="0.2.0" />
 		<PackageReference Include="UnityEngine.Modules" Version="6000.0.50" IncludeAssets="compile" />
 		<PackageReference Include="Silksong.GameLibs" Version="*-*" PrivateAssets="all" />
     </ItemGroup>
@@ -57,12 +58,6 @@
         <Content Include=".config\dotnet-tools.json" />
         <_OpenTKConfig Include="OpenTK.dll.config" />
     </ItemGroup>
-
-	<ItemGroup>
-		<Reference Include="SSMP">
-			<HintPath>H:\SteamLibrary\steamapps\common\Hollow Knight Silksong\BepInEx\plugins\SSMP\SSMP.dll</HintPath>
-		</Reference>
-	</ItemGroup>
 
 	<ItemGroup>
 	  <None Update="CHANGELOG.md">
