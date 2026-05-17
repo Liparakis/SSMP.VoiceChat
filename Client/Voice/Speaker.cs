@@ -69,17 +69,13 @@ public class Speaker {
     }
 
     /// <summary>
-    /// Play the given encoded data, with the given volume, (optionally) at the given position, (optionally) with the
-    /// given max distance.
+    /// Plays the given Opus-encoded voice data, optionally using already-decoded PCM data, and optionally at a world position.
     /// </summary>
     /// <param name="encodedData">The voice data encoded with Opus.</param>
-    /// <param name="volume">The volume that the audio should play at.</param>
-    /// <param name="position">The position at which the audio should play, or null if the audio should not be played
-    /// positionally.</param>
-    /// <param name="maxDistance">The maximum distance the audio should be heard from. If <paramref name="position"/>
-    /// is supplied this max distance will determine the relative volume of the audio.</param>
-    public void Play(byte[] encodedData, Vector3? position = null) {
-        var byteData = _decoder.Decode(encodedData);
+    /// <param name="decodedData">Optional decoded PCM byte data. If null, <paramref name="encodedData"/> is decoded before playback.</param>
+    /// <param name="position">The position at which the audio should play, or null if the audio should not be played positionally. </param>
+    public void Play(byte[] encodedData, byte[]? decodedData = null, Vector3? position = null) {
+        var byteData = decodedData ?? _decoder.Decode(encodedData);
         var data = DataUtils.BytesToShorts(byteData);
         
         RemoveProcessedBuffers();
@@ -89,10 +85,12 @@ public class Speaker {
         var buffers = GetQueuedBuffers();
         var stopped = GetState() == ALSourceState.Initial || GetState() == ALSourceState.Stopped || buffers <= 1;
 
-        if (stopped) {
-            AL.SourcePlay(_source);
-            SoundManager.CheckAlError(0);
+        if (!stopped) {
+            return;
         }
+        
+        AL.SourcePlay(_source);
+        SoundManager.CheckAlError(0);
     }
 
     /// <summary>

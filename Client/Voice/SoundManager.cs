@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using OpenTK;
 using OpenTK.Audio.OpenAL;
+using SsmpVoiceChat.Common.Opus;
 
 namespace SsmpVoiceChat.Client.Voice;
 
@@ -39,6 +40,11 @@ public class SoundManager {
     /// Whether the device speaker is closed.
     /// </summary>
     private bool IsClosed => _device == IntPtr.Zero;
+
+    /// <summary>
+    /// Shared decoder used for observing PCM data before playback.
+    /// </summary>
+    private readonly OpusCodec _decoder;
     
     /// <summary>
     /// Concurrent dictionary mapping player IDs to <see cref="Speaker"/>s.
@@ -47,6 +53,7 @@ public class SoundManager {
 
     public SoundManager() {
         _speakers = new ConcurrentDictionary<ushort, Speaker>();
+        _decoder = new OpusCodec();
     }
 
     /// <summary>
@@ -126,6 +133,20 @@ public class SoundManager {
         }
 
         return true;
+    }
+
+    /// <summary>
+    /// Decode encoded voice data into PCM bytes for observation before playback.
+    /// </summary>
+    /// <param name="encodedData">The Opus-encoded voice data.</param>
+    /// <returns>The decoded PCM bytes, or null if the frame could not be decoded.</returns>
+    public byte[]? DecodeVoiceData(byte[] encodedData) {
+        try {
+            return _decoder.Decode(encodedData);
+        } catch (Exception exception) {
+            ClientVoiceChat.Logger.Warn($"Failed to decode received voice frame for observation:\n{exception}");
+            return null;
+        }
     }
 
     /// <summary>

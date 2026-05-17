@@ -90,6 +90,16 @@ public class MicrophoneManager {
                     // Convert the mic data to bytes and check whether it contains speech with WebRTC VAD
                     var byteBuff = DataUtils.ShortsToBytes(buff);
                     var hasSpeech = _webRtcVad.HasSpeech(buff);
+                    VoiceChatEvents.RaiseVoiceFrameObserved(this, new VoiceFrameEventArgs(
+                        VoiceFrameSource.LocalMicrophone,
+                        null,
+                        (byte[]) byteBuff.Clone(),
+                        SoundManager.SampleRate,
+                        1,
+                        SoundManager.FrameLength,
+                        hasSpeech,
+                        false
+                    ), message => ClientVoiceChat.Logger.Error(message));
 
                     if (!_activating) {
                         if (hasSpeech) {

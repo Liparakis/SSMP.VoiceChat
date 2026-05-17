@@ -74,3 +74,21 @@ SSMP Voice Chat works using a few libraries to facilitate voice chat:
 
 SSMP Voice Chat uses the SSMP API to network audio data and the server addon takes care of delivering the audio to the
 correct clients based on the server configuration.
+
+## Downstream voice frame API
+Other mods can observe PCM voice frames by subscribing to `SsmpVoiceChat.Common.VoiceChatEvents.VoiceFrameObserved`.
+
+The event payload is `SsmpVoiceChat.Common.VoiceFrameEventArgs` and exposes:
+- `Source`: `LocalMicrophone`, `ClientReceived`, or `ServerReceived`
+- `PlayerId`: the associated player ID when available
+- `Pcm16Data`: little-endian signed 16-bit mono PCM
+- `SampleRate`: `48000`
+- `Channels`: `1`
+- `FrameDurationMs`: `20`
+- `HasSpeech`: whether the current frame was considered speech by the current voice activity decision
+- `Proximity`: whether the frame is associated with proximity playback/routing
+
+Current behavior:
+- Local microphone frames are emitted after amplification and RNNoise, before VAD gating and before Opus encoding
+- Client received frames are emitted after Opus decode and before playback
+- Server received frames are emitted after Opus decode and before routing

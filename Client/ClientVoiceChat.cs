@@ -1,4 +1,5 @@
 using SSMP.Api.Client;
+using SsmpVoiceChat.Common;
 using SsmpVoiceChat.Client.Voice;
 using UnityEngine;
 
@@ -190,26 +191,40 @@ public class ClientVoiceChat {
     private void OnVoiceReceived(ushort id, byte[] data, bool proximity) {
         EnableRemoteStatusIcon(id);
 
+        var decodedData = _soundManager.DecodeVoiceData(data);
+        if (decodedData != null) {
+            VoiceChatEvents.RaiseVoiceFrameObserved(this, new VoiceFrameEventArgs(
+                VoiceFrameSource.ClientReceived,
+                id,
+                (byte[]) decodedData.Clone(),
+                SoundManager.SampleRate,
+                1,
+                SoundManager.FrameLength,
+                true,
+                proximity
+            ), message => Logger.Error(message));
+        }
+
         if (!_soundManager.TryGetOrCreateSpeaker(id, out var speaker)) {
             Logger.Warn($"Could not get or create speaker for player '{id}', cannot play voice");
             return;
         }
 
         if (!proximity) {
-            speaker.Play(data);
+            speaker.Play(data, decodedData);
             return;
         }
 
         var hc = HeroController.instance;
         if (hc == null || hc.gameObject == null) {
             Logger.Warn("Local player could not be found, cannot play voice positionally");
-            speaker.Play(data);
+            speaker.Play(data, decodedData);
             return;
         }
 
         if (!_clientApi.ClientManager.TryGetPlayer(id, out var player)) {
             Logger.Warn($"No player found for '{id}', cannot play voice positionally");
-            speaker.Play(data);
+            speaker.Play(data, decodedData);
             return;
         }
 
@@ -220,7 +235,7 @@ public class ClientVoiceChat {
 
         var pos = remotePos - localPos;
 
-        speaker.Play(data, new SSMP.Math.Vector3(pos.x, pos.y, pos.z));
+        speaker.Play(data, decodedData, new SSMP.Math.Vector3(pos.x, pos.y, pos.z));
     }
 
     private void EnableRemoteStatusIcon(ushort id)
