@@ -37,8 +37,9 @@ public class ServerVoiceChat {
 
     /// <summary>
     /// Decoder used to expose server-received PCM frames to downstream mods.
+    /// This is created lazily so normal server relay does not depend on Opus decode initialization.
     /// </summary>
-    private readonly OpusCodec _decoder;
+    private OpusCodec? _decoder;
 
     /// <summary>
     /// Construct the server voice chat with the server addon and API.
@@ -55,7 +56,6 @@ public class ServerVoiceChat {
         _settings = ServerSettings.LoadFromFile();
 
         _broadcasters = [];
-        _decoder = new OpusCodec();
     }
 
     /// <summary>
@@ -72,21 +72,29 @@ public class ServerVoiceChat {
     /// </summary>
     /// <param name="id">The ID of the player.</param>
     /// <param name="data">The voice data.</param>
-    private void OnVoice(ushort id, byte[] data) {
-        try {
-            var decodedData = _decoder.Decode(data);
-            VoiceChatEvents.RaiseVoiceFrameObserved(this, new VoiceFrameEventArgs(
-                VoiceFrameSource.ServerReceived,
-                id,
-                (byte[]) decodedData.Clone(),
-                48000,
-                1,
-                20,
-                true,
-                false
-            ), message => Logger.Error(message));
-        } catch (Exception exception) {
-            Logger.Warn($"Failed to decode received server voice frame for observation:\n{exception}");
+    private void OnVoice(ushort id, byte[] data)
+    {
+        if (VoiceChatEvents.HasVoiceFrameObservers)
+        {
+            try
+            {
+                _decoder ??= new OpusCodec();
+                var decodedData = _decoder.Decode(data);
+                VoiceChatEvents.RaiseVoiceFrameObserved(this, new VoiceFrameEventArgs(
+                    VoiceFrameSource.ServerReceived,
+                    id,
+                    (byte[])decodedData.Clone(),
+                    48000,
+                    1,
+                    20,
+                    true,
+                    false
+                ), message => Logger.Error(message));
+            }
+            catch (Exception exception)
+            {
+                Logger.Warn($"Failed to decode received server voice frame for observation:\n{exception}");
+            }
         }
 
         if (!_serverApi.ServerManager.TryGetPlayer(id, out var sender)) {

@@ -46,13 +46,12 @@ public partial class VoiceChatMod : BaseUnityPlugin
             catch { }
             Logger.LogError($"OpenAL not installed. Please install at {url}");
             SceneManager.sceneLoaded += OpenALErrorWarning;
-        }
 #endif
-
-            ClientAddon.RegisterAddon(new VoiceChatClientAddon());
-            ServerAddon.RegisterAddon(new VoiceChatServerAddon());
-            ModSettings = new ModSettings(Config);
         }
+
+        ClientAddon.RegisterAddon(new VoiceChatClientAddon());
+        ServerAddon.RegisterAddon(new VoiceChatServerAddon());
+        ModSettings = new ModSettings(Config);
 
         void Update()
         {

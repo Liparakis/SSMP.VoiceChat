@@ -191,7 +191,11 @@ public class ClientVoiceChat {
     private void OnVoiceReceived(ushort id, byte[] data, bool proximity) {
         EnableRemoteStatusIcon(id);
 
-        var decodedData = _soundManager.DecodeVoiceData(data);
+        byte[]? decodedData = null;
+        if (VoiceChatEvents.HasVoiceFrameObservers) {
+            decodedData = _soundManager.DecodeVoiceData(data);
+        }
+
         if (decodedData != null) {
             VoiceChatEvents.RaiseVoiceFrameObserved(this, new VoiceFrameEventArgs(
                 VoiceFrameSource.ClientReceived,

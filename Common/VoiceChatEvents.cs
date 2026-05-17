@@ -53,6 +53,20 @@ public static class VoiceChatEvents
     }
 
     /// <summary>
+    /// Whether any listeners are currently subscribed to <see cref="VoiceFrameObserved"/>.
+    /// </summary>
+    internal static bool HasVoiceFrameObservers
+    {
+        get
+        {
+#pragma warning disable CS0420 // A reference to a volatile field will not be treated as volatile
+            // ReSharper disable once InconsistentlySynchronizedField
+            return Volatile.Read(ref _voiceFrameHandlers).Length > 0;
+#pragma warning restore CS0420 // A reference to a volatile field will not be treated as volatile
+        }
+    }
+
+    /// <summary>
     /// Raises <see cref="VoiceFrameObserved"/>, invoking each handler in isolation.
     /// </summary>
     /// <param name="sender">The originating pipeline object.</param>
